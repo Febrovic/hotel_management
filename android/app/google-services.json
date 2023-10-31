@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "842336922427",
+    "project_id": "hotel-managment-cfc23",
+    "storage_bucket": "hotel-managment-cfc23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842336922427:android:1fd95d7cfb2983d201251e",
+        "android_client_info": {
+          "package_name": "com.febrovic.hotel_managmenet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ790W_QYWA5m8HzRRlhrEmKb2xAhwH2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

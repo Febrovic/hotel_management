@@ -235,7 +235,7 @@ class ReservationInfoCard extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddGuestPage(hotelName: hotelName, roomNumber: roomNumber,)));
+                      builder: (context) => AddGuestPage(hotelName: hotelName, roomNumber: roomNumber,collectionId: 'reserve-$clientName',)));
             },),
             Row(
               children: [

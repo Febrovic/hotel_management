@@ -13,7 +13,8 @@ import 'package:flutter/services.dart';
 class AddGuestPage extends StatefulWidget {
   final String hotelName;
   final String roomNumber;
-  const AddGuestPage({Key? key, required this.hotelName, required this.roomNumber}) : super(key: key);
+  final String collectionId;
+  const AddGuestPage({Key? key, required this.hotelName, required this.roomNumber, required this.collectionId}) : super(key: key);
 
   @override
   State<AddGuestPage> createState() => _AddGuestPageState();
@@ -298,220 +299,191 @@ class _AddGuestPageState extends State<AddGuestPage> {
             ),
             ButtonWithoutImage(
               text: AppLocalizations.of(context)!.addReservation,
-              pressed:(){
-                print(widget.hotelName);
-                print(widget.roomNumber);
-              }
-              //     () async {
-              //   setState(() {
-              //     clientNameController.text.isEmpty
-              //         ? clientNameValidate = false
-              //         : clientNameValidate = true;
-              //     nationalityController.text.isEmpty
-              //         ? nationalityValidate = false
-              //         : nationalityValidate = true;
-              //     clientNumberController.text.isEmpty
-              //         ? clientNumberValidate = false
-              //         : clientNumberValidate = true;
-              //     clientNationalIdController.text.isEmpty
-              //         ? clientNationalIdValidate = false
-              //         : clientNationalIdValidate = true;
-              //     amountPaidController.text.isEmpty
-              //         ? amountPaidValidate = false
-              //         : amountPaidValidate = true;
-              //     _startDateController.text.isEmpty
-              //         ? isReserved = true
-              //         : isReserved = false;
-              //     _startDateController.text.isEmpty
-              //         ? isReserved = true
-              //         : isReserved = false;
-              //     comp = false;
-              //   });
-              //   await getRoomsReservation();
-              //   if (clientNameValidate &&
-              //       nationalityValidate &&
-              //       clientNumberValidate &&
-              //       clientNationalIdValidate &&
-              //       amountPaidValidate &&
-              //       !isReserved) {
-              //     if(!comp) {
-              //       showDialog(
-              //           context: context,
-              //           builder: (BuildContext context) {
-              //             return const AlertDialog(
-              //               content: Column(
-              //                 crossAxisAlignment: CrossAxisAlignment.center,
-              //                 mainAxisSize: MainAxisSize.min,
-              //                 children: [
-              //                   CircularProgressIndicator(),
-              //                 ],
-              //               ),
-              //             );
-              //           });
-              //       await saveImage();
-              //       Navigator.pop(context);
-              //     }
-              //
-              //
-              //     await getRoomsPrice();
-              //     await getTotalDays();
-              //     int amountTotal = (cost * totalDays!);
-              //     int amountRest =
-              //         amountTotal - int.parse(amountPaidController.text);
-              //
-              //     await getReservationNumber();
-              //     await getClientNumber();
-              //     final CollectionReference postsRef =
-              //     FirebaseFirestore.instance
-              //         .collection('reservations');
-              //
-              //     final CollectionReference postsRefRoom =
-              //     FirebaseFirestore.instance
-              //         .collection('rooms');
-              //     var postID =
-              //         'reserve-${clientNameController.text}';
-              //
-              //     var postIDRoom =
-              //         'room$roomNumbersDropDownValue';
-              //
-              //     DocumentReference ref =
-              //     postsRef.doc(postID);
-              //
-              //     DocumentReference refRoom =
-              //     postsRefRoom.doc(postIDRoom);
-              //
-              //     ref.set({
-              //       'numberOfTheClient': numberOfTheClient,
-              //       'reservationNumber': reservationNumber,
-              //       'clientName': clientNameController.text,
-              //       'nationality':
-              //       nationalityController.text,
-              //       'clientNumber': int.parse(
-              //           clientNumberController.text),
-              //       'clientNationalId':
-              //       clientNationalIdController.text,
-              //       'hotelName': hotelDropdownValue,
-              //       'roomNumber':
-              //       roomNumbersDropDownValue,
-              //       'startDate': DateFormat('yMMMd')
-              //           .parse(_startDateController.text),
-              //       'endDate': DateFormat('yMMMd')
-              //           .parse(_endDateController.text),
-              //       'amountPaid': int.parse(
-              //           amountPaidController.text),
-              //       'imageLink': resp,
-              //       'clientRate':
-              //       AppLocalizations.of(context)!
-              //           .notDetermined,
-              //     });
-              //
-              //     refRoom.update({
-              //       'clientName': clientNameController.text,
-              //       'clientNationalId':
-              //       clientNationalIdController.text,
-              //       'startDate': DateFormat('yMMMd')
-              //           .parse(_startDateController.text),
-              //       'endDate': DateFormat('yMMMd')
-              //           .parse(_endDateController.text),
-              //     });
-              //     await updateClientNumber();
-              //     await updateReservationNumber();
-              //     await updateTotalIncome();
-              //     setState(() {
-              //       isReserved
-              //           ? null
-              //           :
-              //       showDialog(
-              //           context: context,
-              //           builder: (BuildContext context) {
-              //             return AlertDialog(
-              //               title: Text(AppLocalizations.of(context)!
-              //                   .addReservation),
-              //               content: Column(
-              //                 crossAxisAlignment: CrossAxisAlignment.start,
-              //                 mainAxisSize: MainAxisSize.min,
-              //                 children: [
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.hotelName} : $hotelDropdownValue'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.clientName} : ${clientNameController.text}'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.nationality} : ${nationalityController.text}'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.clientNationalId} : ${clientNationalIdController.text}'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.clientNumber} : ${clientNumberController.text}'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.roomNumber} : $roomNumbersDropDownValue'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.startDate} : ${_startDateController.text}'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.endDate} : ${_endDateController.text}'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.totalDays} : ${totalDays.toString()}'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.amountTotal} : $amountTotal'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.amountPaid} : ${amountPaidController.text}'),
-              //                   Text(
-              //                       '${AppLocalizations.of(context)!.amountRest} : $amountRest'),
-              //                 ],
-              //               ),
-              //               actions: [
-              //                 MaterialButton(
-              //                   onPressed: () async {
-              //                     Navigator.pop(context);
-              //                   },
-              //                   child: Text(
-              //                       AppLocalizations.of(context)!.dismiss),
-              //                 ),
-              //                 MaterialButton(
-              //                   onPressed: () {
-              //                     Navigator.push(
-              //                         context,
-              //                         MaterialPageRoute(
-              //                             builder: (context) => PdfPrev(
-              //                               hotelName:
-              //                               hotelDropdownValue,
-              //                               clientName:
-              //                               clientNameController
-              //                                   .text,
-              //                               nationality:
-              //                               nationalityController
-              //                                   .text,
-              //                               clientId:
-              //                               clientNationalIdController
-              //                                   .text,
-              //                               clientNumber:
-              //                               clientNumberController
-              //                                   .text,
-              //                               roomNumber:
-              //                               roomNumbersDropDownValue,
-              //                               startDate:
-              //                               _startDateController
-              //                                   .text,
-              //                               endDate:
-              //                               _endDateController.text,
-              //                               amountPaid:
-              //                               amountPaidController
-              //                                   .text,
-              //                               amountRest:
-              //                               amountRest.toString(),
-              //                               amountTotal:
-              //                               amountTotal.toString(),
-              //                             )));
-              //                   },
-              //                   child: Text(
-              //                       AppLocalizations.of(context)!.print),
-              //                 ),
-              //               ],
-              //             );
-              //           });
-              //     });
-              //
-              //
-              //   }
-              // },
+              pressed:
+                  () async {
+                setState(() {
+                  clientNameController.text.isEmpty
+                      ? clientNameValidate = false
+                      : clientNameValidate = true;
+                  nationalityController.text.isEmpty
+                      ? nationalityValidate = false
+                      : nationalityValidate = true;
+                  clientNumberController.text.isEmpty
+                      ? clientNumberValidate = false
+                      : clientNumberValidate = true;
+                  clientNationalIdController.text.isEmpty
+                      ? clientNationalIdValidate = false
+                      : clientNationalIdValidate = true;
+                  amountPaidController.text.isEmpty
+                      ? amountPaidValidate = false
+                      : amountPaidValidate = true;
+                  comp = false;
+                });
+                if (clientNameValidate &&
+                    nationalityValidate &&
+                    clientNumberValidate &&
+                    clientNationalIdValidate &&
+                    amountPaidValidate ) {
+                  if(!comp) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const AlertDialog(
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircularProgressIndicator(),
+                              ],
+                            ),
+                          );
+                        });
+                    await saveImage();
+                    Navigator.pop(context);
+                  }
+                  await getRoomsPrice();
+                  await getTotalDays();
+                  int amountTotal = (cost * totalDays!);
+                  int amountRest =
+                      amountTotal - int.parse(amountPaidController.text);
+                  await getClientNumber();
+                  final CollectionReference postsRef =
+                  FirebaseFirestore.instance
+                      .collection('reservations').doc(widget.collectionId).collection('clients');
+
+                  final CollectionReference postsRefRoom =
+                  FirebaseFirestore.instance
+                      .collection('rooms');
+                  var postID =
+                      'client-${clientNameController.text}';
+
+
+                  DocumentReference ref =
+                  postsRef.doc(postID);
+
+
+                  ref.set({
+                    'numberOfTheClient': numberOfTheClient,
+                    'clientName': clientNameController.text,
+                    'nationality':
+                    nationalityController.text,
+                    'clientNumber': int.parse(
+                        clientNumberController.text),
+                    'clientNationalId':
+                    clientNationalIdController.text,
+                    'hotelName': widget.hotelName,
+                    'roomNumber':
+                    widget.roomNumber,
+                    'startDate': DateFormat('yMMMd')
+                        .parse(_startDateController.text),
+                    'endDate': DateFormat('yMMMd')
+                        .parse(_endDateController.text),
+                    'amountPaid': int.parse(
+                        amountPaidController.text),
+                    'imageLink': resp,
+                    'clientRate':
+                    AppLocalizations.of(context)!
+                        .notDetermined,
+                    'bus':false,
+                    'idBracelet':false,
+                    'flight':false,
+                    'huda':false,
+                  });
+
+                  await updateTotalIncome();
+
+                  setState(() {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!
+                                .addReservation),
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                    '${AppLocalizations.of(context)!.hotelName} : ${widget.hotelName}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.clientName} : ${clientNameController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.nationality} : ${nationalityController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.clientNationalId} : ${clientNationalIdController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.clientNumber} : ${clientNumberController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.roomNumber} : ${widget.roomNumber}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.startDate} : ${_startDateController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.endDate} : ${_endDateController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.totalDays} : ${totalDays.toString()}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.amountTotal} : $amountTotal'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.amountPaid} : ${amountPaidController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.amountRest} : $amountRest'),
+                              ],
+                            ),
+                            actions: [
+                              MaterialButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                    AppLocalizations.of(context)!.dismiss),
+                              ),
+                              MaterialButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PdfPrev(
+                                            hotelName:
+                                            widget.hotelName,
+                                            clientName:
+                                            clientNameController
+                                                .text,
+                                            nationality:
+                                            nationalityController
+                                                .text,
+                                            clientId:
+                                            clientNationalIdController
+                                                .text,
+                                            clientNumber:
+                                            clientNumberController
+                                                .text,
+                                            roomNumber:
+                                            widget.roomNumber,
+                                            startDate:
+                                            _startDateController
+                                                .text,
+                                            endDate:
+                                            _endDateController.text,
+                                            amountPaid:
+                                            amountPaidController
+                                                .text,
+                                            amountRest:
+                                            amountRest.toString(),
+                                            amountTotal:
+                                            amountTotal.toString(),
+                                          )));
+                                },
+                                child: Text(
+                                    AppLocalizations.of(context)!.print),
+                              ),
+                            ],
+                          );
+                        });
+                  });
+
+
+                }
+              },
             ),
             const SizedBox(
               height: 20.0,

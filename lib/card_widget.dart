@@ -1,9 +1,9 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:hotel_managmenet/add_data.dart';
+import 'package:hotel_managmenet/add_guest_page.dart';
 import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
 import 'package:image_picker/image_picker.dart';
@@ -231,6 +231,12 @@ class ReservationInfoCard extends StatelessWidget {
                   : '${AppLocalizations.of(context)!.restDays} : $totalDays',
               style: onCardContent,
             ),
+            AddPeopleButton(pressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddGuestPage(hotelName: hotelName, roomNumber: roomNumber,)));
+            },),
             Row(
               children: [
                 Expanded(
@@ -279,7 +285,6 @@ class ReservationInfoCard extends StatelessWidget {
   }
 }
 
-
 class EmployeeInfoCard extends StatefulWidget {
   final String employeeName;
   final String employeeJobTitle;
@@ -287,7 +292,13 @@ class EmployeeInfoCard extends StatefulWidget {
   final int employeeNumber;
   final int employeeSalary;
 
-  const EmployeeInfoCard({super.key, required this.employeeName, required this.employeeJobTitle, required this.employeeTask, required this.employeeNumber, required this.employeeSalary});
+  const EmployeeInfoCard(
+      {super.key,
+      required this.employeeName,
+      required this.employeeJobTitle,
+      required this.employeeTask,
+      required this.employeeNumber,
+      required this.employeeSalary});
 
   @override
   State<EmployeeInfoCard> createState() => _EmployeeInfoCardState();
@@ -310,7 +321,6 @@ class _EmployeeInfoCardState extends State<EmployeeInfoCard> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -363,15 +373,15 @@ class _EmployeeInfoCardState extends State<EmployeeInfoCard> {
             ),
             showImage
                 ? Center(
-              child: Column(
-                children: [
-                  Image.network(imageUrl!),
-                ],
-              ),
-            )
+                    child: Column(
+                      children: [
+                        Image.network(imageUrl!),
+                      ],
+                    ),
+                  )
                 : const SizedBox(
-              height: 0,
-            ),
+                    height: 0,
+                  ),
           ],
         ),
       ],
@@ -847,7 +857,12 @@ class RoomReportInfoCard extends StatelessWidget {
     required this.roomNumber,
     required this.bedNumber,
     required this.bathroomType,
-    required this.reservationState, required this.selectedRadio, required this.clientName, required this.clientNationalId, required this.startDate, required this.endDate,
+    required this.reservationState,
+    required this.selectedRadio,
+    required this.clientName,
+    required this.clientNationalId,
+    required this.startDate,
+    required this.endDate,
   });
 
   final String roomNumber;
@@ -859,8 +874,6 @@ class RoomReportInfoCard extends StatelessWidget {
   final String clientNationalId;
   final DateTime startDate;
   final DateTime endDate;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -889,54 +902,58 @@ class RoomReportInfoCard extends StatelessWidget {
                 ),
               ],
             ),
-            selectedRadio == 2 ? ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF176B87),
-              ),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(AppLocalizations.of(context)!.clientInfo),
-                        content: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                                '${AppLocalizations.of(context)!.clientName} : $clientName'),
-                            Text(
-                                '${AppLocalizations.of(context)!.clientNationalId} : $clientNationalId'),
-                            Text(
-                                '${AppLocalizations.of(context)!.startDate} : ${startDate.year.toString()}/${startDate.month.toString()}/${startDate.day.toString()}'),
-                            Text(
-                                '${AppLocalizations.of(context)!.endDate} : ${endDate.year.toString()}/${endDate.month.toString()}/${endDate.day.toString()}'),
-                          ],
+            selectedRadio == 2
+                ? ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF176B87),
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                  AppLocalizations.of(context)!.clientInfo),
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                      '${AppLocalizations.of(context)!.clientName} : $clientName'),
+                                  Text(
+                                      '${AppLocalizations.of(context)!.clientNationalId} : $clientNationalId'),
+                                  Text(
+                                      '${AppLocalizations.of(context)!.startDate} : ${startDate.year.toString()}/${startDate.month.toString()}/${startDate.day.toString()}'),
+                                  Text(
+                                      '${AppLocalizations.of(context)!.endDate} : ${endDate.year.toString()}/${endDate.month.toString()}/${endDate.day.toString()}'),
+                                ],
+                              ),
+                              actions: [
+                                MaterialButton(
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                      AppLocalizations.of(context)!.dismiss),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.clientInfo,
+                          style: onCardContent,
                         ),
-                        actions: [
-                          MaterialButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                            },
-                            child: Text(AppLocalizations.of(context)!.dismiss),
-                          ),
-                        ],
-                      );
-                    });
-              },
-              child: Row(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.clientInfo,
-                    style: onCardContent,
-                  ),
-                  const Icon(
-                    Icons.keyboard_arrow_left,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ):const SizedBox(),
+                        const Icon(
+                          Icons.keyboard_arrow_left,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
       ],
@@ -953,6 +970,10 @@ class ClientInfoCard extends StatefulWidget {
   final DateTime startDate;
   final String clientRate;
   final int userType;
+  final bool bus;
+  final bool flight;
+  final bool idBracelet;
+  final bool huda;
 
   const ClientInfoCard({
     super.key,
@@ -964,6 +985,10 @@ class ClientInfoCard extends StatefulWidget {
     required this.startDate,
     required this.clientRate,
     required this.userType,
+    required this.bus,
+    required this.flight,
+    required this.idBracelet,
+    required this.huda,
   });
 
   @override
@@ -971,8 +996,12 @@ class ClientInfoCard extends StatefulWidget {
 }
 
 class _ClientInfoCardState extends State<ClientInfoCard> {
-  bool validate = true;
+  bool bus = false;
+  bool flight = false;
+  bool idBracelet = false;
+  bool huda = false;
 
+  bool validate = true;
 
   final clientRateController = TextEditingController();
 
@@ -995,6 +1024,22 @@ class _ClientInfoCardState extends State<ClientInfoCard> {
             .collection('reservations')
             .doc('reserve-${widget.clientName}')
             .update({'clientRate': clientRateController.text});
+      },
+    );
+  }
+
+  Future<void> updateAdditionalServices() async {
+    await FirebaseFirestore.instance.collection("reservations").get().then(
+      (querySnapshot) {
+        FirebaseFirestore.instance
+            .collection('reservations')
+            .doc('reserve-${widget.clientName}')
+            .update({
+          'bus': bus ? true : false,
+          'idBracelet': idBracelet ? true : false,
+          'huda': huda ? true : false,
+          'flight': flight ? true : false,
+        });
       },
     );
   }
@@ -1057,6 +1102,220 @@ class _ClientInfoCardState extends State<ClientInfoCard> {
         Text(
           '${AppLocalizations.of(context)!.dateOfRegistration} : ${widget.startDate.year.toString()}/${widget.startDate.month.toString()}/${widget.startDate.day.toString()}',
           style: onCardContent,
+        ),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: const Color(0xFF176B87),
+          ),
+          child: MaterialButton(
+            onPressed: () {
+              bus = widget.bus;
+              flight = widget.flight;
+              huda = widget.huda;
+              idBracelet = widget.idBracelet;
+
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return StatefulBuilder(
+                      builder: (BuildContext context,
+                          void Function(void Function()) setState) {
+                        return AlertDialog(
+                          title: Text(
+                              AppLocalizations.of(context)!.additionalServices),
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    children: <Widget>[
+                                      //SizedBox
+                                      Text(
+                                        AppLocalizations.of(context)!.bus,
+                                        style: const TextStyle(fontSize: 17.0),
+                                      ), //Text
+                                      Checkbox(
+                                          value: bus,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              bus = value!;
+                                            });
+                                          }), //Checkbox
+                                    ], //<Widget>[]
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      //SizedBox
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .idBracelet,
+                                        style: const TextStyle(fontSize: 17.0),
+                                      ), //Text
+                                      Checkbox(
+                                          value: idBracelet,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              idBracelet = value!;
+                                            });
+                                          }), //Checkbox
+                                    ], //<Widget>[]
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    children: <Widget>[
+                                      //SizedBox
+                                      Text(
+                                        AppLocalizations.of(context)!.flight,
+                                        style: const TextStyle(fontSize: 17.0),
+                                      ), //Text
+                                      Checkbox(
+                                          value: flight,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              flight = value!;
+                                            });
+                                          }), //Checkbox
+                                    ], //<Widget>[]
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      //SizedBox
+                                      Text(
+                                        AppLocalizations.of(context)!.huda,
+                                        style: const TextStyle(fontSize: 17.0),
+                                      ), //Text
+                                      Checkbox(
+                                          value: huda,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              huda = value!;
+                                            });
+                                          }), //Checkbox
+                                    ], //<Widget>[]
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            MaterialButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child:
+                                  Text(AppLocalizations.of(context)!.dismiss),
+                            ),
+                            MaterialButton(
+                              onPressed: () {
+                                updateAdditionalServices();
+                                Navigator.pop(context);
+                              },
+                              child: Text(AppLocalizations.of(context)!.save),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context)!.bus} : ',
+                          style: onCardContent,
+                        ),
+                        widget.bus
+                            ? const Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        )
+                            : const Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context)!.idBracelet} : ',
+                          style: onCardContent,
+                        ),
+                        widget.idBracelet
+                            ? const Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        )
+                            : const Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                  ],
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context)!.flight} : ',
+                          style: onCardContent,
+                        ),
+                        widget.flight
+                            ? const Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        )
+                            : const Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context)!.huda} : ',
+                          style: onCardContent,
+                        ),
+                        widget.huda
+                            ? const Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        )
+                            : const Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
         ),
         widget.userType == 1
             ? Container(
@@ -1252,8 +1511,8 @@ class RoomReportsInfoCard extends StatelessWidget {
 
   Future<void> inOutcome() async {
     await FirebaseFirestore.instance.collection("hotels").get().then(
-          (querySnapshot) async {
-            var flag = 0;
+      (querySnapshot) async {
+        var flag = 0;
         for (var docSnapshot in querySnapshot.docs) {
           if (hotelName == docSnapshot.data()['hotelName']) {
             totalIncome = await FirebaseFirestore.instance
@@ -1262,7 +1521,7 @@ class RoomReportsInfoCard extends StatelessWidget {
                 .get()
                 .then((value) {
               return value.data()?[
-              'totalIncome']; // Access your after your get the data
+                  'totalIncome']; // Access your after your get the data
             });
             totalRestIncome = await FirebaseFirestore.instance
                 .collection('hotels')
@@ -1278,13 +1537,13 @@ class RoomReportsInfoCard extends StatelessWidget {
                 .get()
                 .then((value) {
               return value.data()?[
-              'totalOutcome']; // Access your after your get the data
+                  'totalOutcome']; // Access your after your get the data
             });
-          }else{
+          } else {
             flag = 1;
           }
         }
-        if(flag>0){
+        if (flag > 0) {
           totalIncome = 0;
           totalRestIncome = 0;
           totalOutcome = 0;
@@ -1339,8 +1598,9 @@ class RoomReportsInfoCard extends StatelessWidget {
         FutureBuilder(
           future: inOutcome(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-
-            if(totalIncome != null && totalOutcome!= null &&totalRestIncome!= null){
+            if (totalIncome != null &&
+                totalOutcome != null &&
+                totalRestIncome != null) {
               netProfit = ((totalIncome! + totalRestIncome!) - totalOutcome!);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1359,11 +1619,12 @@ class RoomReportsInfoCard extends StatelessWidget {
                   ),
                   Text(
                     '${AppLocalizations.of(context)!.netProfit}: $netProfit',
-                    style: netProfit > 0 ? greenOnCardContent : redOnCardContent,
+                    style:
+                        netProfit > 0 ? greenOnCardContent : redOnCardContent,
                   ),
                 ],
               );
-            }else {
+            } else {
               return const Center(child: CircularProgressIndicator());
             }
           },
@@ -1375,18 +1636,18 @@ class RoomReportsInfoCard extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => HotelPdfPrev(
-                        roomNumber: roomsCount.toString(),
-                        roomAvailable: emptyRoomsCount.toString(),
-                        roomReserved: reservedRoomsCount.toString(),
-                        maintenanceRoom: maintenanceRoomsCount.toString(),
-                        checkOutTodayCount: checkOutTodayCount.toString(),
-                        checkInTodayCount: checkInTodayCount.toString(),
-                        totalIncome: totalIncome.toString(),
-                        totalRestIncome: totalRestIncome.toString(),
-                        totalOutcome: totalOutcome.toString(),
-                        netProfit: netProfit.toString(),
-                        hotelName: hotelName,
-                      )));
+                            roomNumber: roomsCount.toString(),
+                            roomAvailable: emptyRoomsCount.toString(),
+                            roomReserved: reservedRoomsCount.toString(),
+                            maintenanceRoom: maintenanceRoomsCount.toString(),
+                            checkOutTodayCount: checkOutTodayCount.toString(),
+                            checkInTodayCount: checkInTodayCount.toString(),
+                            totalIncome: totalIncome.toString(),
+                            totalRestIncome: totalRestIncome.toString(),
+                            totalOutcome: totalOutcome.toString(),
+                            netProfit: netProfit.toString(),
+                            hotelName: hotelName,
+                          )));
             }),
       ],
     );
@@ -1495,14 +1756,11 @@ class _OutcomeInfoCardState extends State<OutcomeInfoCard> {
     });
     await saveImage();
     final CollectionReference postsRef =
-    FirebaseFirestore.instance
-        .collection('outcome');
+        FirebaseFirestore.instance.collection('outcome');
 
-    var postID =
-        '${widget.outcomeName}-${widget.amount}';
+    var postID = '${widget.outcomeName}-${widget.amount}';
 
-    DocumentReference ref =
-    postsRef.doc(postID);
+    DocumentReference ref = postsRef.doc(postID);
 
     ref.update({
       'invoiceImage': resp,
@@ -1517,7 +1775,6 @@ class _OutcomeInfoCardState extends State<OutcomeInfoCard> {
     }
   }
 
-
   String? imageUrl;
   Future<void> getImageUrl() async {
     imageUrl = await FirebaseFirestore.instance
@@ -1525,18 +1782,17 @@ class _OutcomeInfoCardState extends State<OutcomeInfoCard> {
         .doc('${widget.outcomeName}-${widget.amount}')
         .get()
         .then((value) {
-      return value.data()?['invoiceImage']; // Access your after your get the data
+      return value
+          .data()?['invoiceImage']; // Access your after your get the data
     });
   }
 
   String resp = 'no link';
-  bool comp =false;
+  bool comp = false;
   Future<void> saveImage() async {
-      resp = await StoreData().saveDataReport(
-          file: _image!,
-          outcomeName: widget.outcomeName,
-          amount: widget.amount);
-      comp = true;
+    resp = await StoreData().saveDataReport(
+        file: _image!, outcomeName: widget.outcomeName, amount: widget.amount);
+    comp = true;
   }
 
   @override
@@ -1569,9 +1825,9 @@ class _OutcomeInfoCardState extends State<OutcomeInfoCard> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 2.0),
           child: ElevatedButton(
-            style:
-            ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
-            onPressed: () async{
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF176B87)),
+            onPressed: () async {
               setState(() {
                 selectImage();
               });
@@ -1588,9 +1844,9 @@ class _OutcomeInfoCardState extends State<OutcomeInfoCard> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 2.0),
           child: ElevatedButton(
-            style:
-            ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
-            onPressed: () async{
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF176B87)),
+            onPressed: () async {
               await getImageUrl();
               setState(() {
                 showImage = !showImage;
@@ -1604,28 +1860,28 @@ class _OutcomeInfoCardState extends State<OutcomeInfoCard> {
             ),
           ),
         ),
-        imageUrl!=null?
-        showImage
-            ? Center(
-          child: Column(
-            children: [
-              Image.network(imageUrl!),
-            ],
-          ),
-        )
-            : const SizedBox():const SizedBox()
+        imageUrl != null
+            ? showImage
+                ? Center(
+                    child: Column(
+                      children: [
+                        Image.network(imageUrl!),
+                      ],
+                    ),
+                  )
+                : const SizedBox()
+            : const SizedBox()
       ],
     );
   }
 }
 
 class UsersInfoCard extends StatelessWidget {
-
   final String username;
   final String password;
 
-  const UsersInfoCard({super.key, required this.username, required this.password});
-
+  const UsersInfoCard(
+      {super.key, required this.username, required this.password});
 
   @override
   Widget build(BuildContext context) {
@@ -1647,7 +1903,8 @@ class UsersInfoCard extends StatelessWidget {
                 id: 'user-$username',
                 collectionName: 'users',
               ),
-            ),Expanded(
+            ),
+            Expanded(
               child: DeleteButton(
                 id: 'user-$username',
                 collectionName: 'users',
@@ -1661,13 +1918,13 @@ class UsersInfoCard extends StatelessWidget {
 }
 
 class StakeholdersInfoCard extends StatelessWidget {
-
   final String stakeholderName;
   final int stakeholderAmount;
 
-  const StakeholdersInfoCard({super.key, required this.stakeholderName, required this.stakeholderAmount});
-
-
+  const StakeholdersInfoCard(
+      {super.key,
+      required this.stakeholderName,
+      required this.stakeholderAmount});
 
   @override
   Widget build(BuildContext context) {
@@ -1689,7 +1946,8 @@ class StakeholdersInfoCard extends StatelessWidget {
                 id: 'stakeholder-$stakeholderName',
                 collectionName: 'stakeholders',
               ),
-            ),Expanded(
+            ),
+            Expanded(
               child: DeleteButton(
                 id: 'stakeholder-$stakeholderName',
                 collectionName: 'stakeholders',

@@ -12,7 +12,8 @@ import 'employee_page.dart';
 class ManagementPage extends StatefulWidget {
 
   final int clientType;
-  const ManagementPage({super.key, required this.clientType});
+  final String username;
+  const ManagementPage({super.key, required this.clientType, required this.username});
 
   @override
   State<ManagementPage> createState() => _ManagementPageState();
@@ -51,6 +52,19 @@ class _ManagementPageState extends State<ManagementPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Padding(
+                padding:
+                const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 60.0,
+                  child: EditPasswordButton(
+                    id: 'user-${widget.username}',
+                    collectionName: 'users',
+                    withIcon: false,
+                  ),
+                ),
+              ),
               ButtonWithoutImage(
                   text: AppLocalizations.of(context)!.shareCapital,
                   pressed: () {

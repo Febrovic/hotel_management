@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hotel_managmenet/add_guest_page.dart';
 import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -451,6 +452,61 @@ class EditButton extends StatelessWidget {
   }
 }
 
+class AddPeopleButton extends StatefulWidget {
+
+  AddPeopleButton({
+    super.key, required this.pressed,
+  });
+  final Function() pressed;
+
+
+  @override
+  State<AddPeopleButton> createState() => _AddPeopleButtonState();
+}
+
+class _AddPeopleButtonState extends State<AddPeopleButton> {
+  // String? totalIncome;
+  // int? peopleNumber;
+  //
+  // Future<void> updatePeopleNumber() async {
+  //   await FirebaseFirestore.instance.collection("reservations").get().then(
+  //         (querySnapshot) async {
+  //           peopleNumber = await FirebaseFirestore.instance
+  //           .collection(widget.collectionName)
+  //           .doc(widget.id)
+  //           .get()
+  //           .then((value) {
+  //         return value.data()?['peopleNumber'];
+  //       });
+  //       var peopleNumbers = peopleNumber! + 1;
+  //       FirebaseFirestore.instance
+  //           .collection(widget.collectionName)
+  //           .doc(widget.id)
+  //           .update({'peopleNumber': peopleNumbers});
+  //     },
+  //   );
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+      child: ElevatedButton(
+        style:
+        ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
+        onPressed: widget.pressed,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(AppLocalizations.of(context)!.addGuests),
+            const Icon(Icons.account_circle),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class EditRoomStateButton extends StatelessWidget {
   EditRoomStateButton({
     super.key,
@@ -538,11 +594,12 @@ class EditPasswordButton extends StatelessWidget {
   EditPasswordButton({
     super.key,
     required this.id,
-    required this.collectionName,
+    required this.collectionName, this.withIcon = true,
   });
 
   final String id;
   final String collectionName;
+  final bool? withIcon;
 
   final passwordController = TextEditingController();
 
@@ -564,8 +621,17 @@ class EditPasswordButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.0),
       child: ElevatedButton(
-        style:
-        ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
+        style: withIcon!
+            ? ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87))
+            : ButtonStyle(
+          backgroundColor:
+          MaterialStateProperty.all<Color>(const Color(0xFF176B87)),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        ),
         onPressed: () {
           showDialog(
               context: context,
@@ -607,8 +673,19 @@ class EditPasswordButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(AppLocalizations.of(context)!.edit),
-            const Icon(Icons.edit),
+            withIcon!
+                ? Text(AppLocalizations.of(context)!.edit)
+                : Text(
+              withIcon!
+                  ? AppLocalizations.of(context)!.edit
+                  : AppLocalizations.of(context)!.editPassword,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            withIcon! ? const Icon(Icons.edit) : SizedBox(),
           ],
         ),
       ),

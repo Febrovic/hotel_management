@@ -65,7 +65,7 @@ class LoginPage extends StatelessWidget {
                isUser ? Navigator.push(
                    context,
                    MaterialPageRoute(
-                       builder: (context) => HomePage(userType: userType,clientType:clientType,))): null;
+                       builder: (context) => HomePage(userType: userType,clientType:clientType,username: userNameController.text,))): null;
             })
           ],
         ),

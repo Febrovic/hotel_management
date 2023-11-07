@@ -14,8 +14,9 @@ import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
 class Reports extends StatefulWidget {
   final int clientType;
+  final String username;
 
-  const Reports({super.key, required this.clientType});
+  const Reports({super.key, required this.clientType, required this.username});
 
   @override
   State<Reports> createState() => _ReportsState();
@@ -236,6 +237,7 @@ class _ReportsState extends State<Reports> {
                         MaterialPageRoute(
                             builder: (context) => ManagementPage(
                                   clientType: widget.clientType,
+                              username: widget.username,
                                 )));
                   }),
             ],

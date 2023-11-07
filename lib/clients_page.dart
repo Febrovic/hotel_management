@@ -113,6 +113,10 @@ class _ClientsPageState extends State<ClientsPage> {
                             client.data()['numberOfTheClient'];
                         final startDate = client.data()['startDate'].toDate();
                         final clientRate = client.data()['clientRate'];
+                        final bus = client.data()['bus'];
+                        final flight = client.data()['flight'];
+                        final huda = client.data()['huda'];
+                        final idBracelet = client.data()['idBracelet'];
                         infoCard.add(
                           InfoCard(
                             child: ClientInfoCard(
@@ -124,6 +128,7 @@ class _ClientsPageState extends State<ClientsPage> {
                               startDate: startDate,
                               clientRate: clientRate,
                               userType: widget.userType!,
+                              bus:bus, flight: flight, idBracelet: idBracelet, huda: huda,
                             ),
                           ),
                         );

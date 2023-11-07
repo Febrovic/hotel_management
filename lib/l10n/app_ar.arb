@@ -112,6 +112,12 @@
   "noStakeholdersYet": "لا يوجد شركاء",
   "editAmount": "تعديل المبلغ",
   "printHotelReport": "طباعة تقارير الفندق",
+  "additionalServices": "خدمات اخري",
+  "bus": "باص",
+  "idBracelet": "اساور الاي دي",
+  "flight": "حجز طيران",
+  "huda": "الهدي",
+  "addGuests": "اضافة عميل للغرفة",
 
   "loginPage": "صفحة الدخول",
   "userName": "اسم المستخدم",

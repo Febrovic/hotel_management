@@ -11,8 +11,9 @@ class HomePage extends StatelessWidget {
 
   final int? userType;
   final int clientType;
+  final String username;
 
-  const HomePage({super.key, this.userType, required this.clientType});
+  const HomePage({super.key, this.userType, required this.clientType, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Reports(clientType:clientType,)));
+                            builder: (context) => Reports(clientType:clientType,username: username,)));
                   },
                 )
               : const SizedBox(),

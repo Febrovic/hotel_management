@@ -111,6 +111,13 @@
   "noStakeholdersYet": "No Stakeholders Yet",
   "editAmount": "Edit Amount",
   "printHotelReport": "Print Hotel Report",
+  "additionalServices": "Additional Services",
+  "bus": "bus",
+  "idBracelet": "Id Bracelet",
+  "flight": "Flight",
+  "huda": "Huda",
+  "guestsNumbers": "Guests Numbers",
+  "addGuests": "Add Guests",
 
 
   "loginPage": "Login Page",

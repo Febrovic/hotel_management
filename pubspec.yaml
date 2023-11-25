@@ -52,6 +52,7 @@ dependencies:
   open_file: ^3.3.2
   pdfx: ^2.4.0
   http: ^1.1.0
+  permission_handler: ^11.0.1
 
 
 dev_dependencies:

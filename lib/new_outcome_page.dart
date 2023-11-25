@@ -39,7 +39,8 @@ class _NewOutcomePageState extends State<NewOutcomePage> {
                   .data()?['totalOutcome'];
             });
             var total = totalOutcome! + int.parse(amountController.text);
-        FirebaseFirestore.instance
+            print(total);
+        await FirebaseFirestore.instance
             .collection('hotels')
             .doc('hotel-${widget.hotelName}')
             .update({'totalOutcome': total});

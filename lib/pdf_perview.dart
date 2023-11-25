@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart'as pdf_wid;
 pdf_wid.Font? arFont;
@@ -77,9 +78,29 @@ Future<Uint8List> _createOutcomePdf(
       },
     ),
   );
+  PermissionStatus storagePermissionStatus = await Permission.storage.status;
+  if (storagePermissionStatus != PermissionStatus.granted) {
+    PermissionStatus requestedPermissionStatus =
+    await Permission.storage.request();
 
+    // If the user granted the permission, download the file
+    if (requestedPermissionStatus == PermissionStatus.granted) {
+      final time =DateTime.now();
+      final file = File("/storage/emulated/0/Download/outcome_$outcomeName.pdf");
+      await file.writeAsBytes(await pdf.save());
+      return pdf.save();
+    } else {
+      // The user did not grant the permission
+      print('Permission to write to external storage was denied');
+    }
+  } else {
+    final time =DateTime.now();
+    final file = File("/storage/emulated/0/Download/outcome_$outcomeName.pdf");
+    await file.writeAsBytes(await pdf.save());
+    return pdf.save();
+  }
   final time =DateTime.now();
-  final file = File("/storage/emulated/0/Download/outcome_$time.pdf");
+  final file = File("/storage/emulated/0/Download/outcome_$outcomeName.pdf");
   await file.writeAsBytes(await pdf.save());
   return pdf.save();
 }
@@ -179,11 +200,31 @@ Future<Uint8List> _createPdf(
       },
     ),
   );
+  PermissionStatus storagePermissionStatus = await Permission.storage.status;
 
-  final time =DateTime.now();
-  final file = File("/storage/emulated/0/Download/reservation_$time.pdf");
-  await file.writeAsBytes(await pdf.save());
+  // If the app does not have the permission, request it from the user
+  if (storagePermissionStatus != PermissionStatus.granted) {
+    PermissionStatus requestedPermissionStatus =
+    await Permission.storage.request();
 
+    // If the user granted the permission, download the file
+    if (requestedPermissionStatus == PermissionStatus.granted) {
+      final time =DateTime.now();
+      final file = File("/storage/emulated/0/Download/reservation_$clientId.pdf");
+      await file.writeAsBytes(await pdf.save());
+
+      return pdf.save();
+    } else {
+      // The user did not grant the permission
+      print('Permission to write to external storage was denied');
+    }
+  }
+    else {
+    final file = File("/storage/emulated/0/Download/reservation_$clientId.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    return pdf.save();
+  }
   return pdf.save();
 }
 
@@ -285,7 +326,7 @@ Future<Uint8List> _createHotelPdf(
   );
 
   final time =DateTime.now();
-  final file = File("/storage/emulated/0/Download/hotel_report_${hotelName}_$time.pdf");
+  final file = File("/storage/emulated/0/Download/hotel_report_${hotelName}.pdf");
   await file.writeAsBytes(await pdf.save());
   return pdf.save();
 }

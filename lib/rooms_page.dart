@@ -205,7 +205,7 @@ class _RoomsPageState extends State<RoomsPage> {
                     }
                   }
                   return infoCard.isEmpty? Padding(
-                    padding: EdgeInsets.only(top: 50.0),
+                    padding: const EdgeInsets.only(top: 50.0),
                     child: Center(child: Text(AppLocalizations.of(context)!.noRoomsYet),),
                   ):Column(
                     children: infoCard,

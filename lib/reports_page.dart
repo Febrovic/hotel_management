@@ -236,6 +236,7 @@ class _ReportsState extends State<Reports> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => ManagementPage(
+                              hotelName: hotelDropdownValue,
                                   clientType: widget.clientType,
                               username: widget.username,
                                 )));

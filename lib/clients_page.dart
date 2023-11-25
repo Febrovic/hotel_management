@@ -97,7 +97,7 @@ class _ClientsPageState extends State<ClientsPage> {
                     );
                   }),
               StreamBuilder(
-                stream: _firestore.collection('reservations').doc().collection('clients').snapshots(),
+                stream: _firestore.collection('reservations').snapshots(),
                 builder: (context, snapshot) {
                   infoCard = [];
                   if (snapshot.hasData) {

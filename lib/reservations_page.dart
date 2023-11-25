@@ -23,6 +23,9 @@ List<Widget> infoCard = [
 class _ReservationsPageState extends State<ReservationsPage> {
   final _firestore = FirebaseFirestore.instance;
 
+
+
+
   String hotelDropdownValue = 'اسم الفندق';
   var hotels = [
     'اسم الفندق',

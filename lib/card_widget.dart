@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:hotel_managmenet/add_data.dart';
-import 'package:hotel_managmenet/add_guest_page.dart';
 import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
+import 'package:hotel_managmenet/specificRoomClients.dart';
 import 'package:image_picker/image_picker.dart';
 
 TextStyle onCardContent =
@@ -72,6 +72,19 @@ class ReservationInfoCard extends StatelessWidget {
   final int? userType;
   int cost = 0;
 
+
+
+  int bedNumber = 0;
+  Future<void> getBedNumber() async {
+    bedNumber = await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc('room$roomNumber')
+        .get()
+        .then((value) {
+      return value.data()?['bedNumber']; // Access your after your get the data
+    });
+  }
+
   int? totalIncome;
   int? totalRest;
   Future<void> updateTotalIncome() async {
@@ -124,6 +137,7 @@ class ReservationInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     getRoomsPrice();
+    getBedNumber();
     var totalDays = endDate.difference(startDate).inDays;
     var restDays = endDate.difference(DateTime.now()).inDays;
 
@@ -231,12 +245,7 @@ class ReservationInfoCard extends StatelessWidget {
                   : '${AppLocalizations.of(context)!.restDays} : $totalDays',
               style: onCardContent,
             ),
-            AddPeopleButton(pressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddGuestPage(hotelName: hotelName, roomNumber: roomNumber,collectionId: 'reserve-$clientName',)));
-            },),
+
             Row(
               children: [
                 Expanded(
@@ -260,9 +269,16 @@ class ReservationInfoCard extends StatelessWidget {
                     : const SizedBox(),
               ],
             ),
+            ShowClientButton(pressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SpecificRoomClients(hotelName: hotelName, roomNumber: roomNumber,userType: userType!, startDate: DateTime.now(),bedNumber: bedNumber)));
+            },),
             FutureBuilder(
               future: getRoomsPrice(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+
                 return PrintButton(
                   hotelName: hotelName,
                   clientName: clientName,
@@ -1543,7 +1559,7 @@ class RoomReportsInfoCard extends StatelessWidget {
             flag = 1;
           }
         }
-        if (flag > 0) {
+        if (flag < 0) {
           totalIncome = 0;
           totalRestIncome = 0;
           totalOutcome = 0;

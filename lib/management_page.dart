@@ -13,31 +13,17 @@ class ManagementPage extends StatefulWidget {
 
   final int clientType;
   final String username;
-  const ManagementPage({super.key, required this.clientType, required this.username});
+  final String hotelName;
+  const ManagementPage({super.key, required this.clientType, required this.username, required this.hotelName});
 
   @override
   State<ManagementPage> createState() => _ManagementPageState();
 }
 
 class _ManagementPageState extends State<ManagementPage> {
-  String hotelDropdownValue = 'اسم الفندق';
   final hotelNameController = TextEditingController();
   bool hotelNameValidate = true;
-  var hotels = [
-    'اسم الفندق',
-  ];
 
-  Future<void> getHotelName() async {
-    await FirebaseFirestore.instance.collection("hotels").get().then(
-          (querySnapshot) {
-        for (var docSnapshot in querySnapshot.docs) {
-          if(docSnapshot.data()['clientType']==widget.clientType || widget.clientType==0){
-            hotels.add(docSnapshot.data()['hotelName'].toString());
-          }
-        }
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +60,7 @@ class _ManagementPageState extends State<ManagementPage> {
                             builder: (context) => ShareCapitalPage(clientType: widget.clientType,
                             )));
                   }),
-              ButtonWithoutImage(
+              widget.clientType == 0 ? ButtonWithoutImage(
                   text: AppLocalizations.of(context)!.adminUsers,
                   pressed: () {
                     Navigator.push(
@@ -82,7 +68,7 @@ class _ManagementPageState extends State<ManagementPage> {
                         MaterialPageRoute(
                             builder: (context) => AdminUsersPage(clientType: widget.clientType,
                             )));
-                  }),
+                  }):SizedBox(),
               ButtonWithoutImage(
                   text: AppLocalizations.of(context)!.users,
                   pressed: () {
@@ -165,8 +151,8 @@ class _ManagementPageState extends State<ManagementPage> {
                           );
                         });
                   }),
-              EditHotelButton(id: 'hotel-$hotelDropdownValue', collectionName: 'hotels',),
-              BigDeleteButton(id: 'hotel-$hotelDropdownValue',collectionName: 'hotels',),
+              EditHotelButton(id: 'hotel-${widget.hotelName}', collectionName: 'hotels',),
+              BigDeleteButton(id: 'hotel-${widget.hotelName}',collectionName: 'hotels',),
             ],
           ),
         ),

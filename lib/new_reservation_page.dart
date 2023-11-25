@@ -5,6 +5,7 @@ import 'package:hotel_managmenet/constants.dart';
 import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'reusable_component.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -57,7 +58,7 @@ class _NewReservationState extends State<NewReservation> {
   int? totalRest;
   Future<void> updateTotalIncome() async {
     await FirebaseFirestore.instance.collection("hotels").get().then(
-      (querySnapshot) async {
+          (querySnapshot) async {
         totalIncome = await FirebaseFirestore.instance
             .collection('hotels')
             .doc('hotel-$hotelDropdownValue')
@@ -125,9 +126,9 @@ class _NewReservationState extends State<NewReservation> {
     if (_image == null) {
       String imageUrl = 'https://static.thenounproject.com/png/897141-200.png';
       Uint8List defaultImage =
-          (await NetworkAssetBundle(Uri.parse(imageUrl)).load(imageUrl))
-              .buffer
-              .asUint8List();
+      (await NetworkAssetBundle(Uri.parse(imageUrl)).load(imageUrl))
+          .buffer
+          .asUint8List();
       resp = await StoreData().saveData(
           file: defaultImage,
           clientName: clientNameController.text,
@@ -144,7 +145,7 @@ class _NewReservationState extends State<NewReservation> {
 
   Future<void> getRoomsNumber() async {
     await FirebaseFirestore.instance.collection("rooms").get().then(
-      (querySnapshot) {
+          (querySnapshot) {
         roomNumDropdownValue = [];
         for (var docSnapshot in querySnapshot.docs) {
           if (hotelDropdownValue == docSnapshot.data()['hotelName']) {
@@ -162,7 +163,7 @@ class _NewReservationState extends State<NewReservation> {
 
   Future<void> getHotelName() async {
     await FirebaseFirestore.instance.collection("hotels").get().then(
-      (querySnapshot) {
+          (querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
           if(docSnapshot.data()['clientType']==widget.clientType || widget.clientType==0 ){
             hotels.add(docSnapshot.data()['hotelName'].toString());
@@ -175,11 +176,11 @@ class _NewReservationState extends State<NewReservation> {
   bool isReserved = false;
   Future<void> getRoomsReservation() async {
     await FirebaseFirestore.instance.collection("reservations").get().then(
-      (querySnapshot) {
+          (querySnapshot) {
         DateTime endDateField =
-            DateFormat('yMMMd').parse(_endDateController.text);
+        DateFormat('yMMMd').parse(_endDateController.text);
         DateTime startDateField =
-            DateFormat('yMMMd').parse(_startDateController.text);
+        DateFormat('yMMMd').parse(_startDateController.text);
 
         for (var docSnapshot in querySnapshot.docs) {
           DateTime endDateDB = docSnapshot.data()['endDate'].toDate();
@@ -191,7 +192,7 @@ class _NewReservationState extends State<NewReservation> {
               if (startDateField
                   .isBefore(endDateDB.add(const Duration(days: 1))) &&
                   endDateField
-                  .isAfter(startDateDB.add(const Duration(days: -1)))) {
+                      .isAfter(startDateDB.add(const Duration(days: -1)))) {
                 isReserved = true;
               } else {
                 isReserved = false;
@@ -240,7 +241,7 @@ class _NewReservationState extends State<NewReservation> {
 
   Future<void> updateClientNumber() async {
     await FirebaseFirestore.instance.collection("hotels").get().then(
-      (querySnapshot) {
+          (querySnapshot) {
         FirebaseFirestore.instance
             .collection('hotels')
             .doc('hotel-$hotelDropdownValue')
@@ -251,7 +252,7 @@ class _NewReservationState extends State<NewReservation> {
 
   Future<void> updateReservationNumber() async {
     await FirebaseFirestore.instance.collection("hotels").get().then(
-      (querySnapshot) {
+          (querySnapshot) {
         FirebaseFirestore.instance
             .collection('hotels')
             .doc('hotel-$hotelDropdownValue')
@@ -287,7 +288,7 @@ class _NewReservationState extends State<NewReservation> {
             if (_image != null)
               Padding(
                 padding:
-                    const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+                const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
                 child: SizedBox(
                   width: double.infinity,
                   height: 150.0,
@@ -303,7 +304,7 @@ class _NewReservationState extends State<NewReservation> {
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   var seen = <String>{};
                   List<String> uniqueList =
-                      hotels.where((hotel) => seen.add(hotel)).toList();
+                  hotels.where((hotel) => seen.add(hotel)).toList();
                   return Padding(
                     padding: const EdgeInsets.only(
                         top: 20.0, left: 20.0, right: 20.0),
@@ -316,7 +317,7 @@ class _NewReservationState extends State<NewReservation> {
                         iconColor: Colors.orange,
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              const BorderSide(color: Color(0xFF176B87)),
+                          const BorderSide(color: Color(0xFF176B87)),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         border: OutlineInputBorder(
@@ -386,7 +387,7 @@ class _NewReservationState extends State<NewReservation> {
                         iconColor: Colors.orange,
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              const BorderSide(color: Color(0xFF176B87)),
+                          const BorderSide(color: Color(0xFF176B87)),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         border: OutlineInputBorder(
@@ -477,74 +478,97 @@ class _NewReservationState extends State<NewReservation> {
                     !isReserved) {
                   if(!comp) {
                     showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const AlertDialog(
-                          content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircularProgressIndicator(),
-                            ],
-                          ),
-                        );
-                      });
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const AlertDialog(
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircularProgressIndicator(),
+                              ],
+                            ),
+                          );
+                        });
                     await saveImage();
                     Navigator.pop(context);
                   }
 
 
-                    await getRoomsPrice();
-                    await getTotalDays();
-                    int amountTotal = (cost * totalDays!);
-                    int amountRest =
-                        amountTotal - int.parse(amountPaidController.text);
+                  await getRoomsPrice();
+                  await getTotalDays();
+                  int amountTotal = (cost * totalDays!);
+                  int amountRest =
+                      amountTotal - int.parse(amountPaidController.text);
 
-                    await getReservationNumber();
-                    await getClientNumber();
-                    final CollectionReference postsRef =
-                    FirebaseFirestore.instance
-                        .collection('reservations');
+                  await getReservationNumber();
+                  await getClientNumber();
+                  final CollectionReference postsRef =
+                  FirebaseFirestore.instance
+                      .collection('reservations');
+
+                  final CollectionReference postsClientRef =
+                  FirebaseFirestore.instance
+                      .collection('clientsInsideRooms');
 
                   final CollectionReference postsRefRoom =
                   FirebaseFirestore.instance
                       .collection('rooms');
-                    var postID =
-                        'reserve-${clientNameController.text}';
+
+                  var postID =
+                      'reserve-${clientNameController.text}';
+
+                  var postClientID =
+                      'clientbed-${clientNameController.text}';
 
                   var postIDRoom =
                       'room$roomNumbersDropDownValue';
 
-                    DocumentReference ref =
-                    postsRef.doc(postID);
+                  DocumentReference ref =
+                  postsRef.doc(postID);
+
+                  DocumentReference refClient =
+                  postsClientRef.doc(postClientID);
 
                   DocumentReference refRoom =
                   postsRefRoom.doc(postIDRoom);
 
-                    ref.set({
-                      'numberOfTheClient': numberOfTheClient,
-                      'reservationNumber': reservationNumber,
-                      'clientName': clientNameController.text,
-                      'nationality':
-                      nationalityController.text,
-                      'clientNumber': int.parse(
-                          clientNumberController.text),
-                      'clientNationalId':
-                      clientNationalIdController.text,
-                      'hotelName': hotelDropdownValue,
-                      'roomNumber':
-                      roomNumbersDropDownValue,
-                      'startDate': DateFormat('yMMMd')
-                          .parse(_startDateController.text),
-                      'endDate': DateFormat('yMMMd')
-                          .parse(_endDateController.text),
-                      'amountPaid': int.parse(
-                          amountPaidController.text),
-                      'imageLink': resp,
-                      'clientRate':
-                      AppLocalizations.of(context)!
-                          .notDetermined,
-                    });
+                  ref.set({
+                    'reservationNumber': reservationNumber,
+                    'roomNumber':
+                    roomNumbersDropDownValue,
+                    'hotelName': hotelDropdownValue,
+                    'startDate': DateFormat('yMMMd')
+                        .parse(_startDateController.text),
+                    'endDate': DateFormat('yMMMd')
+                        .parse(_endDateController.text),
+                    'amountPaid': int.parse(
+                        amountPaidController.text),
+                  });
+
+                  refClient.set({
+                    'numberOfTheClient': numberOfTheClient,
+                    'clientName': clientNameController.text,
+                    'nationality':
+                    nationalityController.text,
+                    'clientNumber': int.parse(
+                        clientNumberController.text),
+                    'clientNationalId':
+                    clientNationalIdController.text,
+                    'hotelName': hotelDropdownValue,
+                    'roomNumber':
+                    roomNumbersDropDownValue,
+                    'startDate': DateFormat('yMMMd')
+                        .parse(_startDateController.text),
+                    'imageLink': resp,
+                    'clientRate':
+                    AppLocalizations.of(context)!
+                        .notDetermined,
+                    'bus':false,
+                    'flight':false,
+                    'huda':false,
+                    'idBracelet':false,
+                  });
 
                   refRoom.update({
                     'clientName': clientNameController.text,
@@ -555,59 +579,102 @@ class _NewReservationState extends State<NewReservation> {
                     'endDate': DateFormat('yMMMd')
                         .parse(_endDateController.text),
                   });
-                    await updateClientNumber();
-                    await updateReservationNumber();
-                    await updateTotalIncome();
-                    setState(() {
-                      isReserved
-                          ? null
-                          :
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(AppLocalizations.of(context)!
-                                  .addReservation),
-                              content: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                      '${AppLocalizations.of(context)!.hotelName} : $hotelDropdownValue'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.clientName} : ${clientNameController.text}'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.nationality} : ${nationalityController.text}'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.clientNationalId} : ${clientNationalIdController.text}'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.clientNumber} : ${clientNumberController.text}'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.roomNumber} : $roomNumbersDropDownValue'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.startDate} : ${_startDateController.text}'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.endDate} : ${_endDateController.text}'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.totalDays} : ${totalDays.toString()}'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.amountTotal} : $amountTotal'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.amountPaid} : ${amountPaidController.text}'),
-                                  Text(
-                                      '${AppLocalizations.of(context)!.amountRest} : $amountRest'),
-                                ],
+                  await updateClientNumber();
+                  await updateReservationNumber();
+                  await updateTotalIncome();
+                  setState(() {
+                    isReserved
+                        ? null
+                        :
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!
+                                .addReservation),
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                    '${AppLocalizations.of(context)!.hotelName} : $hotelDropdownValue'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.clientName} : ${clientNameController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.nationality} : ${nationalityController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.clientNationalId} : ${clientNationalIdController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.clientNumber} : ${clientNumberController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.roomNumber} : $roomNumbersDropDownValue'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.startDate} : ${_startDateController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.endDate} : ${_endDateController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.totalDays} : ${totalDays.toString()}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.amountTotal} : $amountTotal'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.amountPaid} : ${amountPaidController.text}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.amountRest} : $amountRest'),
+                              ],
+                            ),
+                            actions: [
+                              MaterialButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                    AppLocalizations.of(context)!.dismiss),
                               ),
-                              actions: [
-                                MaterialButton(
-                                  onPressed: () async {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                      AppLocalizations.of(context)!.dismiss),
-                                ),
-                                MaterialButton(
-                                  onPressed: () {
+                              MaterialButton(
+                                onPressed: () async{
+
+                                  PermissionStatus storagePermissionStatus = await Permission.storage.status;
+                                  if (storagePermissionStatus != PermissionStatus.granted) {
+                                    PermissionStatus requestedPermissionStatus =
+                                        await Permission.storage.request();
+                                    if (requestedPermissionStatus == PermissionStatus.granted) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => PdfPrev(
+                                                hotelName:
+                                                hotelDropdownValue,
+                                                clientName:
+                                                clientNameController
+                                                    .text,
+                                                nationality:
+                                                nationalityController
+                                                    .text,
+                                                clientId:
+                                                clientNationalIdController
+                                                    .text,
+                                                clientNumber:
+                                                clientNumberController
+                                                    .text,
+                                                roomNumber:
+                                                roomNumbersDropDownValue,
+                                                startDate:
+                                                _startDateController
+                                                    .text,
+                                                endDate:
+                                                _endDateController.text,
+                                                amountPaid:
+                                                amountPaidController
+                                                    .text,
+                                                amountRest:
+                                                amountRest.toString(),
+                                                amountTotal:
+                                                amountTotal.toString(),
+                                              )));
+                                    } else {
+                                      print('Permission to write to external storage was denied');
+                                    }
+                                  } else {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -641,14 +708,18 @@ class _NewReservationState extends State<NewReservation> {
                                               amountTotal:
                                               amountTotal.toString(),
                                             )));
-                                  },
-                                  child: Text(
-                                      AppLocalizations.of(context)!.print),
-                                ),
-                              ],
-                            );
-                          });
-                    });
+                                  }
+
+
+
+                                },
+                                child: Text(
+                                    AppLocalizations.of(context)!.print),
+                              ),
+                            ],
+                          );
+                        });
+                  });
 
 
                 }
@@ -663,3 +734,4 @@ class _NewReservationState extends State<NewReservation> {
     );
   }
 }
+

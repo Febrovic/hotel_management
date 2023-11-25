@@ -117,7 +117,8 @@
   "flight": "Flight",
   "huda": "Huda",
   "guestsNumbers": "Guests Numbers",
-  "addGuests": "Add Guests",
+  "showClients": "Show Clients",
+  "noSpace": "No Space in the room",
 
 
   "loginPage": "Login Page",

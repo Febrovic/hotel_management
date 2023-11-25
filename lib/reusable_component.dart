@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hotel_managmenet/add_guest_page.dart';
 import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ButtonWithoutImage extends StatelessWidget {
   final String text;
@@ -282,6 +282,7 @@ class BigDeleteButton extends StatelessWidget {
   final String collectionName;
 
   deleteRecord(String id, String collectionName) {
+    print(id);
     FirebaseFirestore.instance.collection(collectionName).doc(id).delete();
   }
 
@@ -452,19 +453,19 @@ class EditButton extends StatelessWidget {
   }
 }
 
-class AddPeopleButton extends StatefulWidget {
+class ShowClientButton extends StatefulWidget {
 
-  AddPeopleButton({
+  const ShowClientButton({
     super.key, required this.pressed,
   });
   final Function() pressed;
 
 
   @override
-  State<AddPeopleButton> createState() => _AddPeopleButtonState();
+  State<ShowClientButton> createState() => _ShowClientButtonState();
 }
 
-class _AddPeopleButtonState extends State<AddPeopleButton> {
+class _ShowClientButtonState extends State<ShowClientButton> {
   // String? totalIncome;
   // int? peopleNumber;
   //
@@ -498,7 +499,7 @@ class _AddPeopleButtonState extends State<AddPeopleButton> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(AppLocalizations.of(context)!.addGuests),
+            Text(AppLocalizations.of(context)!.showClients),
             const Icon(Icons.account_circle),
           ],
         ),
@@ -793,6 +794,7 @@ class EditHotelButton extends StatelessWidget {
 
     DocumentSnapshot snapshot= await FirebaseFirestore.instance.collection(collectionName).doc(id).get();
     var document=snapshot.data;
+    print(hotelNameController.text);
     FirebaseFirestore.instance.collection(collectionName).doc('hotel-${hotelNameController.text}').set(document() as Map<String, dynamic>);
     FirebaseFirestore.instance.collection(collectionName).doc(id).delete();
 
@@ -908,11 +910,16 @@ class PrintButton extends StatelessWidget {
       child: ElevatedButton(
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PdfPrev(
+        onPressed: () async {
+          PermissionStatus storagePermissionStatus = await Permission.storage.status;
+          if (storagePermissionStatus != PermissionStatus.granted) {
+            PermissionStatus requestedPermissionStatus =
+                await Permission.storage.request();
+            if (requestedPermissionStatus == PermissionStatus.granted) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PdfPrev(
                         hotelName: hotelName,
                         clientName: clientName,
                         nationality: nationality,
@@ -925,6 +932,28 @@ class PrintButton extends StatelessWidget {
                         amountRest: amountRest.toString(),
                         amountTotal: amountTotal.toString(),
                       )));
+            } else {
+              print('Permission to write to external storage was denied');
+            }
+          } else {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PdfPrev(
+                      hotelName: hotelName,
+                      clientName: clientName,
+                      nationality: nationality,
+                      clientId: clientNationalId,
+                      clientNumber: clientNumber.toString(),
+                      roomNumber: roomNumber,
+                      startDate: startDate.toString(),
+                      endDate: endDate.toString(),
+                      amountPaid: amountPaid.toString(),
+                      amountRest: amountRest.toString(),
+                      amountTotal: amountTotal.toString(),
+                    )));
+          }
+
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -959,16 +988,36 @@ class PrintOutcomeButton extends StatelessWidget {
       child: ElevatedButton(
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OutcomePdfPrev(
+        onPressed: () async {
+          PermissionStatus storagePermissionStatus = await Permission.storage.status;
+          if (storagePermissionStatus != PermissionStatus.granted) {
+            PermissionStatus requestedPermissionStatus =
+                await Permission.storage.request();
+            if (requestedPermissionStatus == PermissionStatus.granted) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OutcomePdfPrev(
                         outcomeName: outcomeName,
                         outcomeTo: outcomeTo,
                         thatAbout: thatAbout,
                         amount: amount.toString(),
                       )));
+            } else {
+              print('Permission to write to external storage was denied');
+            }
+          } else {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OutcomePdfPrev(
+                      outcomeName: outcomeName,
+                      outcomeTo: outcomeTo,
+                      thatAbout: thatAbout,
+                      amount: amount.toString(),
+                    )));
+          }
+
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

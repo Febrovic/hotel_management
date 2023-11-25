@@ -4,26 +4,58 @@ import 'package:hotel_managmenet/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 import 'package:hotel_managmenet/home_page.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
 
-  final userNameController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool isUser = false;
-  int? userType;
-  int clientType = 0;
 
   LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+
+  Future<void> getPerm()async {
+    PermissionStatus storagePermissionStatus = await Permission.storage.status;
+    if (storagePermissionStatus != PermissionStatus.granted) {
+      PermissionStatus requestedPermissionStatus =
+      await Permission.storage.request();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  final userNameController = TextEditingController();
+
+  final passwordController = TextEditingController();
+
+  bool isUser = false;
+
+  int? userType;
+
+  int clientType = 0;
+
   Future<void> getUser() async {
+
     await FirebaseFirestore.instance.collection("users").get().then(
           (querySnapshot) {
+
         for (var docSnapshot in querySnapshot.docs) {
+          print (docSnapshot.data()['username']);
+          print(docSnapshot.data()['password']);
           if(userNameController.text == docSnapshot.data()['username']&&passwordController.text ==docSnapshot.data()['password']){
             isUser = true;
             userType = docSnapshot.data()['userType'];
             clientType = docSnapshot.data()['clientType'];
+            print(docSnapshot.data()['userType']);
             break;
           }else{
+
             isUser = false;
           }
 

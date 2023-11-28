@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_managmenet/add_data.dart';
 import 'package:hotel_managmenet/constants.dart';
-import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'reusable_component.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
 
@@ -14,11 +12,14 @@ class NewExistReserveScreen extends StatefulWidget {
   final String hotelName;
   final String roomNumber;
   final DateTime startDate;
+  final DateTime endDate;
+  final int amountPaid;
+
   const NewExistReserveScreen(
       {Key? key,
       required this.hotelName,
       required this.roomNumber,
-      required this.startDate})
+      required this.startDate, required this.amountPaid, required this.endDate})
       : super(key: key);
 
   @override
@@ -279,16 +280,19 @@ class _NewExistReserveScreenState extends State<NewExistReserveScreen> {
                   await getReservationNumber();
                   await getClientNumber();
 
-                  final CollectionReference postsClientRef = FirebaseFirestore
-                      .instance
-                      .collection('clientsInsideRooms');
+                  final CollectionReference postsRef =
+                  FirebaseFirestore.instance
+                      .collection('reservations');
 
-                  var postClientID = 'clientbed-${clientNameController.text}';
+                  var postID =
+                      'reserve-${clientNameController.text}';
 
-                  DocumentReference refClient =
-                      postsClientRef.doc(postClientID);
+                  DocumentReference ref =
+                  postsRef.doc(postID);
 
-                  refClient.set({
+                  ref.set({
+                    'reservationNumber': reservationNumber,
+                    'amountPaid':widget.amountPaid,
                     'numberOfTheClient': numberOfTheClient,
                     'clientName': clientNameController.text,
                     'nationality': nationalityController.text,
@@ -297,6 +301,7 @@ class _NewExistReserveScreenState extends State<NewExistReserveScreen> {
                     'hotelName': widget.hotelName,
                     'roomNumber': widget.roomNumber,
                     'startDate': widget.startDate,
+                    'endDate':widget.endDate,
                     'imageLink': resp,
                     'clientRate': AppLocalizations.of(context)!.notDetermined,
                     'bus': false,

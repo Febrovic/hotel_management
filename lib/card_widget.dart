@@ -273,7 +273,7 @@ class ReservationInfoCard extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => SpecificRoomClients(hotelName: hotelName, roomNumber: roomNumber,userType: userType!, startDate: DateTime.now(),bedNumber: bedNumber)));
+                      builder: (context) => SpecificRoomClients(hotelName: hotelName, roomNumber: roomNumber,userType: userType!, startDate: DateTime.now(),bedNumber: bedNumber, endDate: endDate, amountPaid: amountPaid,)));
             },),
             FutureBuilder(
               future: getRoomsPrice(),
@@ -491,7 +491,7 @@ class RoomInfoCard extends StatelessWidget {
                             style: onCardContent,
                           ),
                           Text(
-                            '${'\$'}${roomPrice.toString()}',
+                            '${'SR'}${roomPrice.toString()}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 30.0,
@@ -1119,217 +1119,217 @@ class _ClientInfoCardState extends State<ClientInfoCard> {
           '${AppLocalizations.of(context)!.dateOfRegistration} : ${widget.startDate.year.toString()}/${widget.startDate.month.toString()}/${widget.startDate.day.toString()}',
           style: onCardContent,
         ),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: const Color(0xFF176B87),
-          ),
-          child: MaterialButton(
-            onPressed: () {
-              bus = widget.bus;
-              flight = widget.flight;
-              huda = widget.huda;
-              idBracelet = widget.idBracelet;
-
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return StatefulBuilder(
-                      builder: (BuildContext context,
-                          void Function(void Function()) setState) {
-                        return AlertDialog(
-                          title: Text(
-                              AppLocalizations.of(context)!.additionalServices),
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    children: <Widget>[
-                                      //SizedBox
-                                      Text(
-                                        AppLocalizations.of(context)!.bus,
-                                        style: const TextStyle(fontSize: 17.0),
-                                      ), //Text
-                                      Checkbox(
-                                          value: bus,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              bus = value!;
-                                            });
-                                          }), //Checkbox
-                                    ], //<Widget>[]
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      //SizedBox
-                                      Text(
-                                        AppLocalizations.of(context)!
-                                            .idBracelet,
-                                        style: const TextStyle(fontSize: 17.0),
-                                      ), //Text
-                                      Checkbox(
-                                          value: idBracelet,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              idBracelet = value!;
-                                            });
-                                          }), //Checkbox
-                                    ], //<Widget>[]
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    children: <Widget>[
-                                      //SizedBox
-                                      Text(
-                                        AppLocalizations.of(context)!.flight,
-                                        style: const TextStyle(fontSize: 17.0),
-                                      ), //Text
-                                      Checkbox(
-                                          value: flight,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              flight = value!;
-                                            });
-                                          }), //Checkbox
-                                    ], //<Widget>[]
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      //SizedBox
-                                      Text(
-                                        AppLocalizations.of(context)!.huda,
-                                        style: const TextStyle(fontSize: 17.0),
-                                      ), //Text
-                                      Checkbox(
-                                          value: huda,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              huda = value!;
-                                            });
-                                          }), //Checkbox
-                                    ], //<Widget>[]
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          actions: [
-                            MaterialButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child:
-                                  Text(AppLocalizations.of(context)!.dismiss),
-                            ),
-                            MaterialButton(
-                              onPressed: () {
-                                updateAdditionalServices();
-                                Navigator.pop(context);
-                              },
-                              child: Text(AppLocalizations.of(context)!.save),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  });
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context)!.bus} : ',
-                          style: onCardContent,
-                        ),
-                        widget.bus
-                            ? const Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                            : const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context)!.idBracelet} : ',
-                          style: onCardContent,
-                        ),
-                        widget.idBracelet
-                            ? const Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                            : const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      ],
-                    ),
-                  ],
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context)!.flight} : ',
-                          style: onCardContent,
-                        ),
-                        widget.flight
-                            ? const Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                            : const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context)!.huda} : ',
-                          style: onCardContent,
-                        ),
-                        widget.huda
-                            ? const Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                            : const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-              ],
-            ),
-          ),
-        ),
+        // Container(
+        //   width: double.infinity,
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(5.0),
+        //     color: const Color(0xFF176B87),
+        //   ),
+        //   child: MaterialButton(
+        //     onPressed: () {
+        //       bus = widget.bus;
+        //       flight = widget.flight;
+        //       huda = widget.huda;
+        //       idBracelet = widget.idBracelet;
+        //
+        //       showDialog(
+        //           context: context,
+        //           builder: (BuildContext context) {
+        //             return StatefulBuilder(
+        //               builder: (BuildContext context,
+        //                   void Function(void Function()) setState) {
+        //                 return AlertDialog(
+        //                   title: Text(
+        //                       AppLocalizations.of(context)!.additionalServices),
+        //                   content: Row(
+        //                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //                     children: [
+        //                       Column(
+        //                         crossAxisAlignment: CrossAxisAlignment.end,
+        //                         mainAxisSize: MainAxisSize.min,
+        //                         children: [
+        //                           Row(
+        //                             children: <Widget>[
+        //                               //SizedBox
+        //                               Text(
+        //                                 AppLocalizations.of(context)!.bus,
+        //                                 style: const TextStyle(fontSize: 17.0),
+        //                               ), //Text
+        //                               Checkbox(
+        //                                   value: bus,
+        //                                   onChanged: (value) {
+        //                                     setState(() {
+        //                                       bus = value!;
+        //                                     });
+        //                                   }), //Checkbox
+        //                             ], //<Widget>[]
+        //                           ),
+        //                           Row(
+        //                             children: <Widget>[
+        //                               //SizedBox
+        //                               Text(
+        //                                 AppLocalizations.of(context)!
+        //                                     .idBracelet,
+        //                                 style: const TextStyle(fontSize: 17.0),
+        //                               ), //Text
+        //                               Checkbox(
+        //                                   value: idBracelet,
+        //                                   onChanged: (value) {
+        //                                     setState(() {
+        //                                       idBracelet = value!;
+        //                                     });
+        //                                   }), //Checkbox
+        //                             ], //<Widget>[]
+        //                           ),
+        //                         ],
+        //                       ),
+        //                       Column(
+        //                         crossAxisAlignment: CrossAxisAlignment.end,
+        //                         mainAxisSize: MainAxisSize.min,
+        //                         children: [
+        //                           Row(
+        //                             children: <Widget>[
+        //                               //SizedBox
+        //                               Text(
+        //                                 AppLocalizations.of(context)!.flight,
+        //                                 style: const TextStyle(fontSize: 17.0),
+        //                               ), //Text
+        //                               Checkbox(
+        //                                   value: flight,
+        //                                   onChanged: (value) {
+        //                                     setState(() {
+        //                                       flight = value!;
+        //                                     });
+        //                                   }), //Checkbox
+        //                             ], //<Widget>[]
+        //                           ),
+        //                           Row(
+        //                             children: <Widget>[
+        //                               //SizedBox
+        //                               Text(
+        //                                 AppLocalizations.of(context)!.huda,
+        //                                 style: const TextStyle(fontSize: 17.0),
+        //                               ), //Text
+        //                               Checkbox(
+        //                                   value: huda,
+        //                                   onChanged: (value) {
+        //                                     setState(() {
+        //                                       huda = value!;
+        //                                     });
+        //                                   }), //Checkbox
+        //                             ], //<Widget>[]
+        //                           ),
+        //                         ],
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   actions: [
+        //                     MaterialButton(
+        //                       onPressed: () {
+        //                         Navigator.pop(context);
+        //                       },
+        //                       child:
+        //                           Text(AppLocalizations.of(context)!.dismiss),
+        //                     ),
+        //                     MaterialButton(
+        //                       onPressed: () {
+        //                         updateAdditionalServices();
+        //                         Navigator.pop(context);
+        //                       },
+        //                       child: Text(AppLocalizations.of(context)!.save),
+        //                     ),
+        //                   ],
+        //                 );
+        //               },
+        //             );
+        //           });
+        //     },
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         Column(
+        //           crossAxisAlignment: CrossAxisAlignment.end,
+        //           children: [
+        //             Row(
+        //               children: [
+        //                 Text(
+        //                   '${AppLocalizations.of(context)!.bus} : ',
+        //                   style: onCardContent,
+        //                 ),
+        //                 widget.bus
+        //                     ? const Icon(
+        //                   Icons.check,
+        //                   color: Colors.green,
+        //                 )
+        //                     : const Icon(
+        //                   Icons.close,
+        //                   color: Colors.red,
+        //                 ),
+        //               ],
+        //             ),
+        //             Row(
+        //               children: [
+        //                 Text(
+        //                   '${AppLocalizations.of(context)!.idBracelet} : ',
+        //                   style: onCardContent,
+        //                 ),
+        //                 widget.idBracelet
+        //                     ? const Icon(
+        //                   Icons.check,
+        //                   color: Colors.green,
+        //                 )
+        //                     : const Icon(
+        //                   Icons.close,
+        //                   color: Colors.red,
+        //                 ),
+        //               ],
+        //             ),
+        //           ],
+        //         ),
+        //         Column(
+        //           crossAxisAlignment: CrossAxisAlignment.end,
+        //           children: [
+        //             Row(
+        //               children: [
+        //                 Text(
+        //                   '${AppLocalizations.of(context)!.flight} : ',
+        //                   style: onCardContent,
+        //                 ),
+        //                 widget.flight
+        //                     ? const Icon(
+        //                   Icons.check,
+        //                   color: Colors.green,
+        //                 )
+        //                     : const Icon(
+        //                   Icons.close,
+        //                   color: Colors.red,
+        //                 ),
+        //               ],
+        //             ),
+        //             Row(
+        //               children: [
+        //                 Text(
+        //                   '${AppLocalizations.of(context)!.huda} : ',
+        //                   style: onCardContent,
+        //                 ),
+        //                 widget.huda
+        //                     ? const Icon(
+        //                   Icons.check,
+        //                   color: Colors.green,
+        //                 )
+        //                     : const Icon(
+        //                   Icons.close,
+        //                   color: Colors.red,
+        //                 ),
+        //               ],
+        //             ),
+        //           ],
+        //         ),
+        //
+        //       ],
+        //     ),
+        //   ),
+        // ),
         const SizedBox(
           height: 10,
         ),
@@ -1431,6 +1431,128 @@ class _ClientInfoCardState extends State<ClientInfoCard> {
             : const SizedBox(
                 height: 0,
               ),
+      ],
+    );
+  }
+}
+
+class BusInfoCard extends StatefulWidget {
+  final String clientName;
+  final int clientNumber;
+  final String clientNationalId;
+  final DateTime startDate;
+  final String hotelName;
+  final String roomNumber;
+  const BusInfoCard({Key? key, required this.clientName, required this.clientNumber, required this.clientNationalId, required this.startDate, required this.hotelName, required this.roomNumber}) : super(key: key);
+
+  @override
+  State<BusInfoCard> createState() => _BusInfoCardState();
+}
+
+class _BusInfoCardState extends State<BusInfoCard> {
+
+  bool bus = false;
+  bool flight = false;
+  bool idBracelet = false;
+  bool huda = false;
+
+  bool validate = true;
+
+  final serviceController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '${AppLocalizations.of(context)!.clientName} : ${widget.clientName}',
+              style: onCardContent,
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.clientNumber} : ${widget.clientNumber}',
+              style: onCardContent,
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.clientNationalId} : ${widget.clientNationalId}',
+              style: onCardContent,
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.hotelName} : ${widget.hotelName}',
+              style: onCardContent,
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.roomNumber} : ${widget.roomNumber}',
+              style: onCardContent,
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.startDate} : ${widget.startDate.year.toString()}/${widget.startDate.month.toString()}/${widget.startDate.day.toString()}',
+              style: onCardContent,
+            ),
+          ],
+        ),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: const Color(0xFF176B87),
+          ),
+          child: MaterialButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title:
+                      Text(AppLocalizations.of(context)!.addToThisService),
+                      content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFieldCustom(
+                            labelText:
+                            AppLocalizations.of(context)!.addAmount,
+                            textInputType: TextInputType.text,
+                            controller: serviceController,
+                            validate: validate,
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        MaterialButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child:
+                          Text(AppLocalizations.of(context)!.dismiss),
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            setState(() {
+                              serviceController.text.isNotEmpty
+                                  ? validate = true
+                                  : validate = false;
+                            });
+                            if (validate == true) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text(AppLocalizations.of(context)!.save),
+                        ),
+                      ],
+                    );
+                  });
+            },
+            child: Text(
+              AppLocalizations.of(context)!.addToThisService,
+              style: onCardContent,
+            ),
+          ),
+        ),
       ],
     );
   }

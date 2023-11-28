@@ -282,7 +282,6 @@ class BigDeleteButton extends StatelessWidget {
   final String collectionName;
 
   deleteRecord(String id, String collectionName) {
-    print(id);
     FirebaseFirestore.instance.collection(collectionName).doc(id).delete();
   }
 
@@ -794,7 +793,6 @@ class EditHotelButton extends StatelessWidget {
 
     DocumentSnapshot snapshot= await FirebaseFirestore.instance.collection(collectionName).doc(id).get();
     var document=snapshot.data;
-    print(hotelNameController.text);
     FirebaseFirestore.instance.collection(collectionName).doc('hotel-${hotelNameController.text}').set(document() as Map<String, dynamic>);
     FirebaseFirestore.instance.collection(collectionName).doc(id).delete();
 
@@ -933,7 +931,7 @@ class PrintButton extends StatelessWidget {
                         amountTotal: amountTotal.toString(),
                       )));
             } else {
-              print('Permission to write to external storage was denied');
+              debugPrint('Permission to write to external storage was denied');
             }
           } else {
             Navigator.push(
@@ -1004,7 +1002,7 @@ class PrintOutcomeButton extends StatelessWidget {
                         amount: amount.toString(),
                       )));
             } else {
-              print('Permission to write to external storage was denied');
+              debugPrint('Permission to write to external storage was denied');
             }
           } else {
             Navigator.push(

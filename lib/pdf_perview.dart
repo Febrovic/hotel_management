@@ -91,7 +91,7 @@ Future<Uint8List> _createOutcomePdf(
       return pdf.save();
     } else {
       // The user did not grant the permission
-      print('Permission to write to external storage was denied');
+      debugPrint('Permission to write to external storage was denied');
     }
   } else {
     final time =DateTime.now();
@@ -216,7 +216,7 @@ Future<Uint8List> _createPdf(
       return pdf.save();
     } else {
       // The user did not grant the permission
-      print('Permission to write to external storage was denied');
+      debugPrint('Permission to write to external storage was denied');
     }
   }
     else {

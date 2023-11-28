@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hotel_managmenet/additional_services_page.dart';
 import 'package:hotel_managmenet/admin_users_page.dart';
 import 'package:hotel_managmenet/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localization.dart';
@@ -68,7 +69,7 @@ class _ManagementPageState extends State<ManagementPage> {
                         MaterialPageRoute(
                             builder: (context) => AdminUsersPage(clientType: widget.clientType,
                             )));
-                  }):SizedBox(),
+                  }):const SizedBox(),
               ButtonWithoutImage(
                   text: AppLocalizations.of(context)!.users,
                   pressed: () {
@@ -77,6 +78,14 @@ class _ManagementPageState extends State<ManagementPage> {
                         MaterialPageRoute(
                             builder: (context) => UsersPage(clientType: widget.clientType,
                             )));
+                  }),
+              ButtonWithoutImage(
+                  text: AppLocalizations.of(context)!.additionalServices,
+                  pressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AdditionalServicesPage(hotelName: widget.hotelName,clientType: widget.clientType,)));
                   }),
               ButtonWithoutImage(
                   text: AppLocalizations.of(context)!.employeesInformation,
@@ -140,6 +149,10 @@ class _ManagementPageState extends State<ManagementPage> {
                                       'totalOutcome': 0,
                                       'totalRest': 0,
                                       'clientType':widget.clientType,
+                                      'idBraceletPrice':0,
+                                      'busPrice':0,
+                                      'hudaPrice':0,
+                                      'flightPrice':0,
                                     });
                                     Navigator.pop(context);
                                   }

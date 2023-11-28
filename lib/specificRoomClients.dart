@@ -12,8 +12,10 @@ class SpecificRoomClients extends StatefulWidget {
   final String hotelName;
   final String roomNumber;
   final DateTime startDate;
+  final DateTime endDate;
+  final int amountPaid;
   final int bedNumber;
-  const SpecificRoomClients({Key? key, required this.userType, required this.hotelName, required this.roomNumber, required this.startDate, required this.bedNumber}) : super(key: key);
+  const SpecificRoomClients({Key? key, required this.userType, required this.hotelName, required this.roomNumber, required this.startDate, required this.bedNumber, required this.endDate, required this.amountPaid}) : super(key: key);
 
   @override
   State<SpecificRoomClients> createState() => _SpecificRoomClientsState();
@@ -55,7 +57,7 @@ class _SpecificRoomClientsState extends State<SpecificRoomClients> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  NewExistReserveScreen(hotelName: widget.hotelName, roomNumber: widget.roomNumber, startDate: widget.startDate, )));
+                              builder: (context) =>  NewExistReserveScreen(hotelName: widget.hotelName, roomNumber: widget.roomNumber, startDate: widget.startDate, amountPaid:  widget.amountPaid, endDate:  widget.endDate, )));
                     }else{
                       showDialog(
                           context: context,

@@ -119,6 +119,11 @@
   "huda": "الهدي",
   "showClients": "اظهار العملاء",
   "noSpace": "لايوجد مكان بالغرفة",
+  "busPrice": "سعر الباص",
+  "idBraceletPrice": "سعر اساور الاي دي",
+  "flightPrice": "سعر حجز طيران",
+  "hudaPrice": "سعر الهدي",
+  "addToThisService": "اضافة الخدمة لهذا العميل",
 
   "loginPage": "صفحة الدخول",
   "userName": "اسم المستخدم",

@@ -507,10 +507,6 @@ class _NewReservationState extends State<NewReservation> {
                   FirebaseFirestore.instance
                       .collection('reservations');
 
-                  final CollectionReference postsClientRef =
-                  FirebaseFirestore.instance
-                      .collection('clientsInsideRooms');
-
                   final CollectionReference postsRefRoom =
                   FirebaseFirestore.instance
                       .collection('rooms');
@@ -518,17 +514,12 @@ class _NewReservationState extends State<NewReservation> {
                   var postID =
                       'reserve-${clientNameController.text}';
 
-                  var postClientID =
-                      'clientbed-${clientNameController.text}';
-
                   var postIDRoom =
                       'room$roomNumbersDropDownValue';
 
                   DocumentReference ref =
                   postsRef.doc(postID);
 
-                  DocumentReference refClient =
-                  postsClientRef.doc(postClientID);
 
                   DocumentReference refRoom =
                   postsRefRoom.doc(postIDRoom);
@@ -544,9 +535,6 @@ class _NewReservationState extends State<NewReservation> {
                         .parse(_endDateController.text),
                     'amountPaid': int.parse(
                         amountPaidController.text),
-                  });
-
-                  refClient.set({
                     'numberOfTheClient': numberOfTheClient,
                     'clientName': clientNameController.text,
                     'nationality':
@@ -555,11 +543,6 @@ class _NewReservationState extends State<NewReservation> {
                         clientNumberController.text),
                     'clientNationalId':
                     clientNationalIdController.text,
-                    'hotelName': hotelDropdownValue,
-                    'roomNumber':
-                    roomNumbersDropDownValue,
-                    'startDate': DateFormat('yMMMd')
-                        .parse(_startDateController.text),
                     'imageLink': resp,
                     'clientRate':
                     AppLocalizations.of(context)!
@@ -672,7 +655,7 @@ class _NewReservationState extends State<NewReservation> {
                                                 amountTotal.toString(),
                                               )));
                                     } else {
-                                      print('Permission to write to external storage was denied');
+                                      debugPrint('Permission to write to external storage was denied');
                                     }
                                   } else {
                                     Navigator.push(

@@ -1450,6 +1450,8 @@ class BusInfoCard extends StatefulWidget {
   final String hotelName;
   final String roomNumber;
   final int servicePaid;
+  final int serviceType;
+  final int amountRest;
   const BusInfoCard(
       {Key? key,
       required this.clientName,
@@ -1458,7 +1460,9 @@ class BusInfoCard extends StatefulWidget {
       required this.startDate,
       required this.hotelName,
       required this.roomNumber,
-      required this.servicePaid})
+      required this.servicePaid,
+      required this.serviceType,
+      required this.amountRest})
       : super(key: key);
 
   @override
@@ -1475,33 +1479,37 @@ class _BusInfoCardState extends State<BusInfoCard> {
 
   final serviceController = TextEditingController();
 
-  int cost = 0;
-  Future<void> getServicePrice() async {
-    print("sjdjsakd $cost");
-    cost = await FirebaseFirestore.instance
-        .collection('hotels')
-        .doc('hotel-${widget.hotelName}')
-        .get()
-        .then((value) {
-      return value.data()?['busPrice']; // Access your after your get the data
-    });
-    print("sjdjsakd $cost");
-  }
-
   Future<void> updatePaid() async {
     await FirebaseFirestore.instance.collection("reservations").get().then(
       (querySnapshot) {
-        FirebaseFirestore.instance
-            .collection('reservations')
-            .doc('reserve-${widget.clientName}')
-            .update({'paidBus': int.parse(serviceController.text)});
+        widget.serviceType == 0
+            ? FirebaseFirestore.instance
+                .collection('reservations')
+                .doc('reserve-${widget.clientName}')
+                .update({'paidBus': int.parse(serviceController.text)})
+            : widget.serviceType == 1
+                ? FirebaseFirestore.instance
+                    .collection('reservations')
+                    .doc('reserve-${widget.clientName}')
+                    .update({'paidFlight': int.parse(serviceController.text)})
+                : widget.serviceType == 2
+                    ? FirebaseFirestore.instance
+                        .collection('reservations')
+                        .doc('reserve-${widget.clientName}')
+                        .update({
+                        'paidIdBracelet': int.parse(serviceController.text)
+                      })
+                    : FirebaseFirestore.instance
+                        .collection('reservations')
+                        .doc('reserve-${widget.clientName}')
+                        .update(
+                            {'paidHuda': int.parse(serviceController.text)});
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    getServicePrice();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1538,7 +1546,7 @@ class _BusInfoCardState extends State<BusInfoCard> {
               style: greenOnCardContent,
             ),
             Text(
-              '${AppLocalizations.of(context)!.amountRest} : ${(cost - widget.servicePaid)}',
+              '${AppLocalizations.of(context)!.amountRest} : ${widget.amountRest}',
               style: greenOnCardContent,
             ),
           ],

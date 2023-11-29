@@ -39,6 +39,25 @@ class _BusScreenState extends State<BusScreen> {
     );
   }
 
+  int cost = 0;
+  Future<void> getServicePrice() async {
+    cost = await FirebaseFirestore.instance
+        .collection('hotels')
+        .doc('hotel-$hotelDropdownValue')
+        .get()
+        .then((value) {
+      return widget.serviceType == 0
+          ? (value.data()?['busPrice'])
+          : widget.serviceType == 1
+              ? (value.data()?['flightPrice'])
+              : widget.serviceType == 2
+                  ? (value.data()?['idBraceletPrice'])
+                  : (value.data()?[
+                      'hudaPrice']); // Access your after your get the data
+    });
+    print("price:$cost");
+  }
+
   String hotelDropdownValue = 'اسم الفندق';
   var hotels = [
     'اسم الفندق',
@@ -58,13 +77,25 @@ class _BusScreenState extends State<BusScreen> {
   }
 
   @override
+  void initState() {
+    getServicePrice();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
         backgroundColor: Constants.appBarBGColor,
         centerTitle: true,
-        title: Text(AppLocalizations.of(context)!.clients),
+        title: Text(widget.serviceType == 0
+            ? AppLocalizations.of(context)!.bus
+            : widget.serviceType == 1
+                ? AppLocalizations.of(context)!.flight
+                : widget.serviceType == 2
+                    ? AppLocalizations.of(context)!.idBracelet
+                    : AppLocalizations.of(context)!.huda),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -72,23 +103,59 @@ class _BusScreenState extends State<BusScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ButtonWithoutImage(
-                text: AppLocalizations.of(context)!.busPrice,
+                text: widget.serviceType == 0
+                    ? AppLocalizations.of(context)!.busPrice
+                    : widget.serviceType == 1
+                        ? AppLocalizations.of(context)!.flightPrice
+                        : widget.serviceType == 2
+                            ? AppLocalizations.of(context)!.idBraceletPrice
+                            : AppLocalizations.of(context)!.hudaPrice,
                 pressed: () {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.busPrice),
+                          title: Text(
+                            widget.serviceType == 0
+                                ? AppLocalizations.of(context)!.busPrice
+                                : widget.serviceType == 1
+                                    ? AppLocalizations.of(context)!.flightPrice
+                                    : widget.serviceType == 2
+                                        ? AppLocalizations.of(context)!
+                                            .idBraceletPrice
+                                        : AppLocalizations.of(context)!
+                                            .hudaPrice,
+                          ),
                           content: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               TextFieldCustom(
-                                labelText:
-                                    AppLocalizations.of(context)!.busPrice,
+                                labelText: widget.serviceType == 0
+                                    ? AppLocalizations.of(context)!.busPrice
+                                    : widget.serviceType == 1
+                                        ? AppLocalizations.of(context)!
+                                            .flightPrice
+                                        : widget.serviceType == 2
+                                            ? AppLocalizations.of(context)!
+                                                .idBraceletPrice
+                                            : AppLocalizations.of(context)!
+                                                .hudaPrice,
                                 textInputType: TextInputType.number,
-                                controller: busController,
-                                validate: busValidate,
+                                controller: widget.serviceType == 0
+                                    ? busController
+                                    : widget.serviceType == 1
+                                        ? flightController
+                                        : widget.serviceType == 2
+                                            ? idBraceletController
+                                            : hudaController,
+                                validate: widget.serviceType == 0
+                                    ? busValidate
+                                    : widget.serviceType == 1
+                                        ? flightValidate
+                                        : widget.serviceType == 2
+                                            ? idBraceletValidate
+                                            : hudaValidate,
                               ),
                             ],
                           ),
@@ -106,11 +173,43 @@ class _BusScreenState extends State<BusScreen> {
                                   busController.text.isNotEmpty
                                       ? busValidate = true
                                       : busValidate = false;
+                                  idBraceletController.text.isNotEmpty
+                                      ? idBraceletValidate = true
+                                      : idBraceletValidate = false;
+                                  flightController.text.isNotEmpty
+                                      ? flightValidate = true
+                                      : flightValidate = false;
+                                  hudaController.text.isNotEmpty
+                                      ? hudaValidate = true
+                                      : hudaValidate = false;
                                 });
-                                if (busValidate == true) {
-                                  updateAmount('busPrice',
-                                      int.parse(busController.text));
-                                  Navigator.pop(context);
+                                if (widget.serviceType == 0) {
+                                  if (busValidate == true) {
+                                    updateAmount('busPrice',
+                                        int.parse(busController.text));
+                                    Navigator.pop(context);
+                                  }
+                                }
+                                if (widget.serviceType == 1) {
+                                  if (flightValidate == true) {
+                                    updateAmount('flightPrice',
+                                        int.parse(flightController.text));
+                                    Navigator.pop(context);
+                                  }
+                                }
+                                if (widget.serviceType == 2) {
+                                  if (idBraceletValidate == true) {
+                                    updateAmount('idBraceletPrice',
+                                        int.parse(busController.text));
+                                    Navigator.pop(context);
+                                  }
+                                }
+                                if (widget.serviceType == 3) {
+                                  if (busValidate == true) {
+                                    updateAmount('hudaPrice',
+                                        int.parse(busController.text));
+                                    Navigator.pop(context);
+                                  }
                                 }
                               },
                               child:
@@ -180,7 +279,14 @@ class _BusScreenState extends State<BusScreen> {
                             client.data()['clientNationalId'];
                         final startDate = client.data()['startDate'].toDate();
                         final roomNumber = client.data()['roomNumber'];
-                        final servicePaid = client.data()['paidBus'];
+                        final int servicePaid = widget.serviceType == 0
+                            ? client.data()['paidBus']
+                            : widget.serviceType == 1
+                                ? client.data()['paidFlight']
+                                : widget.serviceType == 2
+                                    ? client.data()['paidIdBracelet']
+                                    : client.data()['paidHuda'];
+                        final amountRest = (cost - servicePaid);
                         infoCard.add(
                           InfoCard(
                             child: BusInfoCard(
@@ -191,6 +297,8 @@ class _BusScreenState extends State<BusScreen> {
                               hotelName: hotelDropdownValue,
                               roomNumber: roomNumber,
                               servicePaid: servicePaid,
+                              serviceType: widget.serviceType,
+                              amountRest: amountRest,
                             ),
                           ),
                         );

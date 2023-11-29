@@ -63,6 +63,7 @@
   "dismiss": "Dismiss",
   "notDetermined": "Not Determined",
   "idImage": "Id Image",
+  "anotherServices":"Another Services",
 
   "noOutcomesYet": "No Outcomes Yet",
   "roomsNumber": "Rooms numbers",
@@ -124,10 +125,12 @@
   "flightPrice": "Flight Price",
   "hudaPrice": "Huda Price",
   "addToThisService": "Add Service To Client",
+  "servicePaid": "Service Paid",
 
   "loginPage": "Login Page",
   "userName": "Username",
   "password": "Password",
   "login": "Login"
+
 
 }

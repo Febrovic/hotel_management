@@ -64,6 +64,7 @@
   "dismiss": "الغاء",
   "notDetermined": "لم يحدد بعد",
   "idImage": "صورة بطاقة الهوية",
+  "anotherServices":"خدمات اخري",
 
   "noOutcomesYet": "لا يوجد مصروفات",
   "roomsNumber": "عدد الغرف",
@@ -124,6 +125,7 @@
   "flightPrice": "سعر حجز طيران",
   "hudaPrice": "سعر الهدي",
   "addToThisService": "اضافة الخدمة لهذا العميل",
+  "servicePaid": "المدفوع من هذه الخدمة",
 
   "loginPage": "صفحة الدخول",
   "userName": "اسم المستخدم",

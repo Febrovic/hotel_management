@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_managmenet/additional_services_page.dart';
 import 'package:hotel_managmenet/admin_users_page.dart';
 import 'package:hotel_managmenet/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
 import 'package:hotel_managmenet/share_capital.dart';
 import 'package:hotel_managmenet/users_page.dart';

@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ButtonWithoutImage extends StatelessWidget {
@@ -453,12 +453,11 @@ class EditButton extends StatelessWidget {
 }
 
 class ShowClientButton extends StatefulWidget {
-
   const ShowClientButton({
-    super.key, required this.pressed,
+    super.key,
+    required this.pressed,
   });
   final Function() pressed;
-
 
   @override
   State<ShowClientButton> createState() => _ShowClientButtonState();
@@ -493,7 +492,7 @@ class _ShowClientButtonState extends State<ShowClientButton> {
       padding: const EdgeInsets.symmetric(horizontal: 2.0),
       child: ElevatedButton(
         style:
-        ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
+            ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
         onPressed: widget.pressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -594,7 +593,8 @@ class EditPasswordButton extends StatelessWidget {
   EditPasswordButton({
     super.key,
     required this.id,
-    required this.collectionName, this.withIcon = true,
+    required this.collectionName,
+    this.withIcon = true,
   });
 
   final String id;
@@ -607,7 +607,7 @@ class EditPasswordButton extends StatelessWidget {
 
   Future<void> updatePassword() async {
     await FirebaseFirestore.instance.collection(collectionName).get().then(
-          (querySnapshot) {
+      (querySnapshot) {
         FirebaseFirestore.instance
             .collection(collectionName)
             .doc(id)
@@ -624,14 +624,14 @@ class EditPasswordButton extends StatelessWidget {
         style: withIcon!
             ? ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87))
             : ButtonStyle(
-          backgroundColor:
-          MaterialStateProperty.all<Color>(const Color(0xFF176B87)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-        ),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(const Color(0xFF176B87)),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
         onPressed: () {
           showDialog(
               context: context,
@@ -676,15 +676,15 @@ class EditPasswordButton extends StatelessWidget {
             withIcon!
                 ? Text(AppLocalizations.of(context)!.edit)
                 : Text(
-              withIcon!
-                  ? AppLocalizations.of(context)!.edit
-                  : AppLocalizations.of(context)!.editPassword,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+                    withIcon!
+                        ? AppLocalizations.of(context)!.edit
+                        : AppLocalizations.of(context)!.editPassword,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
             withIcon! ? const Icon(Icons.edit) : SizedBox(),
           ],
         ),
@@ -709,11 +709,9 @@ class EditStakeholderAmount extends StatelessWidget {
 
   Future<void> updateStakeholderAmount() async {
     await FirebaseFirestore.instance.collection(collectionName).get().then(
-          (querySnapshot) {
-        FirebaseFirestore.instance
-            .collection(collectionName)
-            .doc(id)
-            .update({'stakeholderAmount': int.parse(stakeholderAmountController.text)});
+      (querySnapshot) {
+        FirebaseFirestore.instance.collection(collectionName).doc(id).update(
+            {'stakeholderAmount': int.parse(stakeholderAmountController.text)});
       },
     );
   }
@@ -724,7 +722,7 @@ class EditStakeholderAmount extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 2.0),
       child: ElevatedButton(
         style:
-        ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
+            ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
         onPressed: () {
           showDialog(
               context: context,
@@ -736,7 +734,8 @@ class EditStakeholderAmount extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextFieldCustom(
-                        labelText: AppLocalizations.of(context)!.stakeholderAmount,
+                        labelText:
+                            AppLocalizations.of(context)!.stakeholderAmount,
                         textInputType: TextInputType.text,
                         controller: stakeholderAmountController,
                         validate: validate,
@@ -790,16 +789,21 @@ class EditHotelButton extends StatelessWidget {
   bool validate = true;
   int? paidAmount;
   Future<void> updateHotelName() async {
-
-    DocumentSnapshot snapshot= await FirebaseFirestore.instance.collection(collectionName).doc(id).get();
-    var document=snapshot.data;
-    FirebaseFirestore.instance.collection(collectionName).doc('hotel-${hotelNameController.text}').set(document() as Map<String, dynamic>);
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc(id)
+        .get();
+    var document = snapshot.data;
+    FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc('hotel-${hotelNameController.text}')
+        .set(document() as Map<String, dynamic>);
     FirebaseFirestore.instance.collection(collectionName).doc(id).delete();
 
-        await FirebaseFirestore.instance
-            .collection(collectionName)
-            .doc('hotel-${hotelNameController.text}')
-            .update({'hotelName': hotelNameController.text});
+    await FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc('hotel-${hotelNameController.text}')
+        .update({'hotelName': hotelNameController.text});
   }
 
   @override
@@ -812,7 +816,7 @@ class EditHotelButton extends StatelessWidget {
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor:
-            MaterialStateProperty.all<Color>(const Color(0xFF176B87)),
+                MaterialStateProperty.all<Color>(const Color(0xFF176B87)),
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -860,11 +864,14 @@ class EditHotelButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(AppLocalizations.of(context)!.editHotel,style: const TextStyle(
-          color: Colors.white,
-          fontSize: 25.0,
-          fontWeight: FontWeight.bold,
-        ),),
+              Text(
+                AppLocalizations.of(context)!.editHotel,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),
@@ -909,7 +916,8 @@ class PrintButton extends StatelessWidget {
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
         onPressed: () async {
-          PermissionStatus storagePermissionStatus = await Permission.storage.status;
+          PermissionStatus storagePermissionStatus =
+              await Permission.storage.status;
           if (storagePermissionStatus != PermissionStatus.granted) {
             PermissionStatus requestedPermissionStatus =
                 await Permission.storage.request();
@@ -918,18 +926,18 @@ class PrintButton extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => PdfPrev(
-                        hotelName: hotelName,
-                        clientName: clientName,
-                        nationality: nationality,
-                        clientId: clientNationalId,
-                        clientNumber: clientNumber.toString(),
-                        roomNumber: roomNumber,
-                        startDate: startDate.toString(),
-                        endDate: endDate.toString(),
-                        amountPaid: amountPaid.toString(),
-                        amountRest: amountRest.toString(),
-                        amountTotal: amountTotal.toString(),
-                      )));
+                            hotelName: hotelName,
+                            clientName: clientName,
+                            nationality: nationality,
+                            clientId: clientNationalId,
+                            clientNumber: clientNumber.toString(),
+                            roomNumber: roomNumber,
+                            startDate: startDate.toString(),
+                            endDate: endDate.toString(),
+                            amountPaid: amountPaid.toString(),
+                            amountRest: amountRest.toString(),
+                            amountTotal: amountTotal.toString(),
+                          )));
             } else {
               debugPrint('Permission to write to external storage was denied');
             }
@@ -938,20 +946,19 @@ class PrintButton extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => PdfPrev(
-                      hotelName: hotelName,
-                      clientName: clientName,
-                      nationality: nationality,
-                      clientId: clientNationalId,
-                      clientNumber: clientNumber.toString(),
-                      roomNumber: roomNumber,
-                      startDate: startDate.toString(),
-                      endDate: endDate.toString(),
-                      amountPaid: amountPaid.toString(),
-                      amountRest: amountRest.toString(),
-                      amountTotal: amountTotal.toString(),
-                    )));
+                          hotelName: hotelName,
+                          clientName: clientName,
+                          nationality: nationality,
+                          clientId: clientNationalId,
+                          clientNumber: clientNumber.toString(),
+                          roomNumber: roomNumber,
+                          startDate: startDate.toString(),
+                          endDate: endDate.toString(),
+                          amountPaid: amountPaid.toString(),
+                          amountRest: amountRest.toString(),
+                          amountTotal: amountTotal.toString(),
+                        )));
           }
-
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -987,7 +994,8 @@ class PrintOutcomeButton extends StatelessWidget {
         style:
             ElevatedButton.styleFrom(backgroundColor: const Color(0xFF176B87)),
         onPressed: () async {
-          PermissionStatus storagePermissionStatus = await Permission.storage.status;
+          PermissionStatus storagePermissionStatus =
+              await Permission.storage.status;
           if (storagePermissionStatus != PermissionStatus.granted) {
             PermissionStatus requestedPermissionStatus =
                 await Permission.storage.request();
@@ -996,11 +1004,11 @@ class PrintOutcomeButton extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => OutcomePdfPrev(
-                        outcomeName: outcomeName,
-                        outcomeTo: outcomeTo,
-                        thatAbout: thatAbout,
-                        amount: amount.toString(),
-                      )));
+                            outcomeName: outcomeName,
+                            outcomeTo: outcomeTo,
+                            thatAbout: thatAbout,
+                            amount: amount.toString(),
+                          )));
             } else {
               debugPrint('Permission to write to external storage was denied');
             }
@@ -1009,13 +1017,12 @@ class PrintOutcomeButton extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => OutcomePdfPrev(
-                      outcomeName: outcomeName,
-                      outcomeTo: outcomeTo,
-                      thatAbout: thatAbout,
-                      amount: amount.toString(),
-                    )));
+                          outcomeName: outcomeName,
+                          outcomeTo: outcomeTo,
+                          thatAbout: thatAbout,
+                          amount: amount.toString(),
+                        )));
           }
-
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_managmenet/add_employee_page.dart';
 import 'package:hotel_managmenet/card_widget.dart';
 import 'package:hotel_managmenet/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EmployeesPage extends StatefulWidget {
   final int clientType;

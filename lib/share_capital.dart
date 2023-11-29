@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_managmenet/card_widget.dart';
 import 'package:hotel_managmenet/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
 
 class ShareCapitalPage extends StatefulWidget {

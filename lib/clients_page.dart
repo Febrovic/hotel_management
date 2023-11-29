@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotel_managmenet/constants.dart';
 import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
@@ -18,6 +18,7 @@ class ClientsPage extends StatefulWidget {
 }
 
 List<Widget> infoCard = [];
+
 class _ClientsPageState extends State<ClientsPage> {
   String hotelDropdownValue = 'اسم الفندق';
   var hotels = [
@@ -36,7 +37,6 @@ class _ClientsPageState extends State<ClientsPage> {
       },
     );
   }
-
 
   final _firestore = FirebaseFirestore.instance;
   @override
@@ -128,7 +128,10 @@ class _ClientsPageState extends State<ClientsPage> {
                               startDate: startDate,
                               clientRate: clientRate,
                               userType: widget.userType!,
-                              bus:bus, flight: flight, idBracelet: idBracelet, huda: huda,
+                              bus: bus,
+                              flight: flight,
+                              idBracelet: idBracelet,
+                              huda: huda,
                             ),
                           ),
                         );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_managmenet/constants.dart';
 import 'card_widget.dart';
 import 'new_room_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RoomsPage extends StatefulWidget {
   final int? userType;
@@ -28,7 +28,8 @@ class _RoomsPageState extends State<RoomsPage> {
     await FirebaseFirestore.instance.collection("hotels").get().then(
       (querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
-          if(docSnapshot.data()['clientType']==widget.clientType || widget.clientType==0 ){
+          if (docSnapshot.data()['clientType'] == widget.clientType ||
+              widget.clientType == 0) {
             hotels.add(docSnapshot.data()['hotelName'].toString());
           }
         }
@@ -71,9 +72,7 @@ class _RoomsPageState extends State<RoomsPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child:
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             widget.userType == 1
                 ? Padding(
                     padding: const EdgeInsets.only(
@@ -92,7 +91,9 @@ class _RoomsPageState extends State<RoomsPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => NewRoom(clientType: widget.clientType,)));
+                                builder: (context) => NewRoom(
+                                      clientType: widget.clientType,
+                                    )));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -204,12 +205,17 @@ class _RoomsPageState extends State<RoomsPage> {
                       );
                     }
                   }
-                  return infoCard.isEmpty? Padding(
-                    padding: const EdgeInsets.only(top: 50.0),
-                    child: Center(child: Text(AppLocalizations.of(context)!.noRoomsYet),),
-                  ):Column(
-                    children: infoCard,
-                  );
+                  return infoCard.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: Center(
+                            child:
+                                Text(AppLocalizations.of(context)!.noRoomsYet),
+                          ),
+                        )
+                      : Column(
+                          children: infoCard,
+                        );
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }

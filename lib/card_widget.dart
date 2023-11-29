@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotel_managmenet/add_data.dart';
 import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
@@ -71,8 +71,6 @@ class ReservationInfoCard extends StatelessWidget {
   final int amountPaid;
   final int? userType;
   int cost = 0;
-
-
 
   int bedNumber = 0;
   Future<void> getBedNumber() async {
@@ -245,7 +243,6 @@ class ReservationInfoCard extends StatelessWidget {
                   : '${AppLocalizations.of(context)!.restDays} : $totalDays',
               style: onCardContent,
             ),
-
             Row(
               children: [
                 Expanded(
@@ -269,16 +266,25 @@ class ReservationInfoCard extends StatelessWidget {
                     : const SizedBox(),
               ],
             ),
-            ShowClientButton(pressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SpecificRoomClients(hotelName: hotelName, roomNumber: roomNumber,userType: userType!, startDate: DateTime.now(),bedNumber: bedNumber, endDate: endDate, amountPaid: amountPaid,)));
-            },),
+            ShowClientButton(
+              pressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SpecificRoomClients(
+                              hotelName: hotelName,
+                              roomNumber: roomNumber,
+                              userType: userType!,
+                              startDate: DateTime.now(),
+                              bedNumber: bedNumber,
+                              endDate: endDate,
+                              amountPaid: amountPaid,
+                            )));
+              },
+            ),
             FutureBuilder(
               future: getRoomsPrice(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-
                 return PrintButton(
                   hotelName: hotelName,
                   clientName: clientName,
@@ -1443,14 +1449,23 @@ class BusInfoCard extends StatefulWidget {
   final DateTime startDate;
   final String hotelName;
   final String roomNumber;
-  const BusInfoCard({Key? key, required this.clientName, required this.clientNumber, required this.clientNationalId, required this.startDate, required this.hotelName, required this.roomNumber}) : super(key: key);
+  final int servicePaid;
+  const BusInfoCard(
+      {Key? key,
+      required this.clientName,
+      required this.clientNumber,
+      required this.clientNationalId,
+      required this.startDate,
+      required this.hotelName,
+      required this.roomNumber,
+      required this.servicePaid})
+      : super(key: key);
 
   @override
   State<BusInfoCard> createState() => _BusInfoCardState();
 }
 
 class _BusInfoCardState extends State<BusInfoCard> {
-
   bool bus = false;
   bool flight = false;
   bool idBracelet = false;
@@ -1460,8 +1475,33 @@ class _BusInfoCardState extends State<BusInfoCard> {
 
   final serviceController = TextEditingController();
 
+  int cost = 0;
+  Future<void> getServicePrice() async {
+    print("sjdjsakd $cost");
+    cost = await FirebaseFirestore.instance
+        .collection('hotels')
+        .doc('hotel-${widget.hotelName}')
+        .get()
+        .then((value) {
+      return value.data()?['busPrice']; // Access your after your get the data
+    });
+    print("sjdjsakd $cost");
+  }
+
+  Future<void> updatePaid() async {
+    await FirebaseFirestore.instance.collection("reservations").get().then(
+      (querySnapshot) {
+        FirebaseFirestore.instance
+            .collection('reservations')
+            .doc('reserve-${widget.clientName}')
+            .update({'paidBus': int.parse(serviceController.text)});
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    getServicePrice();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1493,7 +1533,18 @@ class _BusInfoCardState extends State<BusInfoCard> {
               '${AppLocalizations.of(context)!.startDate} : ${widget.startDate.year.toString()}/${widget.startDate.month.toString()}/${widget.startDate.day.toString()}',
               style: onCardContent,
             ),
+            Text(
+              '${AppLocalizations.of(context)!.servicePaid} : ${widget.servicePaid}',
+              style: greenOnCardContent,
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.amountRest} : ${(cost - widget.servicePaid)}',
+              style: greenOnCardContent,
+            ),
           ],
+        ),
+        const SizedBox(
+          height: 5.0,
         ),
         Container(
           width: double.infinity,
@@ -1508,14 +1559,13 @@ class _BusInfoCardState extends State<BusInfoCard> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title:
-                      Text(AppLocalizations.of(context)!.addToThisService),
+                          Text(AppLocalizations.of(context)!.addToThisService),
                       content: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextFieldCustom(
-                            labelText:
-                            AppLocalizations.of(context)!.addAmount,
+                            labelText: AppLocalizations.of(context)!.addAmount,
                             textInputType: TextInputType.text,
                             controller: serviceController,
                             validate: validate,
@@ -1527,8 +1577,7 @@ class _BusInfoCardState extends State<BusInfoCard> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child:
-                          Text(AppLocalizations.of(context)!.dismiss),
+                          child: Text(AppLocalizations.of(context)!.dismiss),
                         ),
                         MaterialButton(
                           onPressed: () {
@@ -1538,6 +1587,7 @@ class _BusInfoCardState extends State<BusInfoCard> {
                                   : validate = false;
                             });
                             if (validate == true) {
+                              updatePaid();
                               Navigator.pop(context);
                             }
                           },
@@ -1548,7 +1598,9 @@ class _BusInfoCardState extends State<BusInfoCard> {
                   });
             },
             child: Text(
-              AppLocalizations.of(context)!.addToThisService,
+              widget.servicePaid == 0
+                  ? AppLocalizations.of(context)!.addToThisService
+                  : AppLocalizations.of(context)!.editAmount,
               style: onCardContent,
             ),
           ),

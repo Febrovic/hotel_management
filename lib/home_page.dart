@@ -5,15 +5,18 @@ import 'clients_page.dart';
 import 'reports_page.dart';
 import 'reservations_page.dart';
 import 'rooms_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
-
   final int? userType;
   final int clientType;
   final String username;
 
-  const HomePage({super.key, this.userType, required this.clientType, required this.username});
+  const HomePage(
+      {super.key,
+      this.userType,
+      required this.clientType,
+      required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,9 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Constants.appBarBGColor,
         centerTitle: true,
-        title: Text(AppLocalizations.of(context)!.homePage),
+        title: Text(
+          AppLocalizations.of(context)!.homePage,
+        ),
       ),
       body: SafeArea(
         child: Column(children: [
@@ -35,7 +40,7 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => ReservationsPage(
                             userType: userType,
-                          clientType:clientType,
+                            clientType: clientType,
                           )));
             },
           ),
@@ -48,7 +53,7 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => RoomsPage(
                             userType: userType,
-                        clientType:clientType,
+                            clientType: clientType,
                           )));
             },
           ),
@@ -61,7 +66,7 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => ClientsPage(
                             userType: userType,
-                        clientType:clientType,
+                            clientType: clientType,
                           )));
             },
           ),
@@ -73,7 +78,10 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Reports(clientType:clientType,username: username,)));
+                            builder: (context) => Reports(
+                                  clientType: clientType,
+                                  username: username,
+                                )));
                   },
                 )
               : const SizedBox(),

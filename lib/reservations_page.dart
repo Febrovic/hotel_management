@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hotel_managmenet/constants.dart';
 import 'card_widget.dart';
 import 'new_reservation_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReservationsPage extends StatefulWidget {
-
   final int? userType;
   final int clientType;
 
@@ -16,15 +15,10 @@ class ReservationsPage extends StatefulWidget {
   State<ReservationsPage> createState() => _ReservationsPageState();
 }
 
-List<Widget> infoCard = [
-];
-
+List<Widget> infoCard = [];
 
 class _ReservationsPageState extends State<ReservationsPage> {
   final _firestore = FirebaseFirestore.instance;
-
-
-
 
   String hotelDropdownValue = 'اسم الفندق';
   var hotels = [
@@ -33,12 +27,12 @@ class _ReservationsPageState extends State<ReservationsPage> {
 
   Future<void> getHotelName() async {
     await FirebaseFirestore.instance.collection("hotels").get().then(
-          (querySnapshot) {
+      (querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
-          if(docSnapshot.data()['clientType']==widget.clientType || widget.clientType==0 ){
+          if (docSnapshot.data()['clientType'] == widget.clientType ||
+              widget.clientType == 0) {
             hotels.add(docSnapshot.data()['hotelName'].toString());
           }
-
         }
       },
     );
@@ -58,8 +52,7 @@ class _ReservationsPageState extends State<ReservationsPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children:
-            [
+            children: [
               Padding(
                 padding:
                     const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
@@ -77,7 +70,9 @@ class _ReservationsPageState extends State<ReservationsPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NewReservation(clientType: widget.clientType,)));
+                            builder: (context) => NewReservation(
+                                  clientType: widget.clientType,
+                                )));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -98,16 +93,14 @@ class _ReservationsPageState extends State<ReservationsPage> {
                   ),
                 ),
               ),
-
               FutureBuilder(
                   future: getHotelName(),
                   builder:
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     var seen = <String>{};
-                    List<String> uniqueList = hotels
-                        .where((hotel) => seen.add(hotel))
-                        .toList();
-                    if(hotels.isEmpty){
+                    List<String> uniqueList =
+                        hotels.where((hotel) => seen.add(hotel)).toList();
+                    if (hotels.isEmpty) {
                       return const CircularProgressIndicator();
                     }
                     return Padding(
@@ -122,7 +115,7 @@ class _ReservationsPageState extends State<ReservationsPage> {
                           iconColor: Colors.orange,
                           focusedBorder: OutlineInputBorder(
                             borderSide:
-                            const BorderSide(color: Color(0xFF176B87)),
+                                const BorderSide(color: Color(0xFF176B87)),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           border: OutlineInputBorder(
@@ -149,22 +142,23 @@ class _ReservationsPageState extends State<ReservationsPage> {
               StreamBuilder(
                 stream: _firestore.collection('reservations').snapshots(),
                 builder: (context, snapshot) {
-                  infoCard=[];
+                  infoCard = [];
                   if (snapshot.hasData) {
                     final reservation = snapshot.data?.docs;
                     for (var reserve in reservation!) {
-                      if(hotelDropdownValue == reserve.data()['hotelName']){
+                      if (hotelDropdownValue == reserve.data()['hotelName']) {
                         final clientName = reserve.data()['clientName'];
                         final clientNumber = reserve.data()['clientNumber'];
                         final clientNationalId =
-                        reserve.data()['clientNationalId'];
+                            reserve.data()['clientNationalId'];
                         final hotelName = reserve.data()['hotelName'];
                         final nationality = reserve.data()['nationality'];
                         final roomNumber = reserve.data()['roomNumber'];
                         final startDate = reserve.data()['startDate'].toDate();
                         final endDate = reserve.data()['endDate'].toDate();
-                        final reservationNumber = reserve.data()['reservationNumber'];
-                        final amountPaid= reserve.data()['amountPaid'];
+                        final reservationNumber =
+                            reserve.data()['reservationNumber'];
+                        final amountPaid = reserve.data()['amountPaid'];
                         infoCard.add(
                           InfoCard(
                             child: ReservationInfoCard(
@@ -184,13 +178,18 @@ class _ReservationsPageState extends State<ReservationsPage> {
                         );
                       }
                     }
-                    return infoCard.isEmpty? Padding(
-                      padding: EdgeInsets.only(top: 50.0),
-                      child: Center(child: Text(AppLocalizations.of(context)!.noReservationsYet),),
-                    ):Column(
-                      children: infoCard,
-                    );
-                  }else{
+                    return infoCard.isEmpty
+                        ? Padding(
+                            padding: EdgeInsets.only(top: 50.0),
+                            child: Center(
+                              child: Text(AppLocalizations.of(context)!
+                                  .noReservationsYet),
+                            ),
+                          )
+                        : Column(
+                            children: infoCard,
+                          );
+                  } else {
                     return const Center(child: CircularProgressIndicator());
                   }
                 },
@@ -202,4 +201,3 @@ class _ReservationsPageState extends State<ReservationsPage> {
     );
   }
 }
-

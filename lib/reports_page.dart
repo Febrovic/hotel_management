@@ -10,7 +10,7 @@ import 'package:hotel_managmenet/reusable_component.dart';
 import 'package:hotel_managmenet/rooms_report.dart';
 import 'package:hotel_managmenet/users_page.dart';
 import 'card_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Reports extends StatefulWidget {
   final int clientType;

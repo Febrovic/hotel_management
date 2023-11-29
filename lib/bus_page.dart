@@ -2,20 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_managmenet/card_widget.dart';
 import 'package:hotel_managmenet/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
 
 class BusScreen extends StatefulWidget {
-  const BusScreen({Key? key, required this.clientType, required this.serviceType}) : super(key: key);
+  const BusScreen(
+      {Key? key, required this.clientType, required this.serviceType})
+      : super(key: key);
   final int clientType;
   final int serviceType;
 
   @override
   State<BusScreen> createState() => _BusScreenState();
 }
-List<Widget> infoCard = [];
-class _BusScreenState extends State<BusScreen> {
 
+List<Widget> infoCard = [];
+
+class _BusScreenState extends State<BusScreen> {
   final busController = TextEditingController();
   final idBraceletController = TextEditingController();
   final hudaController = TextEditingController();
@@ -27,7 +30,7 @@ class _BusScreenState extends State<BusScreen> {
 
   Future<void> updateAmount(String service, int amount) async {
     await FirebaseFirestore.instance.collection('hotels').get().then(
-          (querySnapshot) {
+      (querySnapshot) {
         FirebaseFirestore.instance
             .collection('hotels')
             .doc('hotel-$hotelDropdownValue')
@@ -36,23 +39,23 @@ class _BusScreenState extends State<BusScreen> {
     );
   }
 
-String hotelDropdownValue = 'اسم الفندق';
-var hotels = [
-  'اسم الفندق',
-];
+  String hotelDropdownValue = 'اسم الفندق';
+  var hotels = [
+    'اسم الفندق',
+  ];
 
-Future<void> getHotelName() async {
-  await FirebaseFirestore.instance.collection("hotels").get().then(
-        (querySnapshot) {
-      for (var docSnapshot in querySnapshot.docs) {
-        if (docSnapshot.data()['clientType'] == widget.clientType ||
-            widget.clientType == 0) {
-          hotels.add(docSnapshot.data()['hotelName'].toString());
+  Future<void> getHotelName() async {
+    await FirebaseFirestore.instance.collection("hotels").get().then(
+      (querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          if (docSnapshot.data()['clientType'] == widget.clientType ||
+              widget.clientType == 0) {
+            hotels.add(docSnapshot.data()['hotelName'].toString());
+          }
         }
-      }
-    },
-  );
-}
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +72,8 @@ Future<void> getHotelName() async {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ButtonWithoutImage(
-                  text: AppLocalizations.of(context)!.busPrice,
-                  pressed:
-                    () {
+                text: AppLocalizations.of(context)!.busPrice,
+                pressed: () {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -83,7 +85,7 @@ Future<void> getHotelName() async {
                             children: [
                               TextFieldCustom(
                                 labelText:
-                                AppLocalizations.of(context)!.busPrice,
+                                    AppLocalizations.of(context)!.busPrice,
                                 textInputType: TextInputType.number,
                                 controller: busController,
                                 validate: busValidate,
@@ -96,7 +98,7 @@ Future<void> getHotelName() async {
                                 Navigator.pop(context);
                               },
                               child:
-                              Text(AppLocalizations.of(context)!.dismiss),
+                                  Text(AppLocalizations.of(context)!.dismiss),
                             ),
                             MaterialButton(
                               onPressed: () {
@@ -106,12 +108,13 @@ Future<void> getHotelName() async {
                                       : busValidate = false;
                                 });
                                 if (busValidate == true) {
-                                  updateAmount('busPrice', int.parse(busController.text));
+                                  updateAmount('busPrice',
+                                      int.parse(busController.text));
                                   Navigator.pop(context);
                                 }
                               },
                               child:
-                              Text(AppLocalizations.of(context)!.addAmount),
+                                  Text(AppLocalizations.of(context)!.addAmount),
                             ),
                           ],
                         );
@@ -124,7 +127,7 @@ Future<void> getHotelName() async {
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     var seen = <String>{};
                     List<String> uniqueList =
-                    hotels.where((hotel) => seen.add(hotel)).toList();
+                        hotels.where((hotel) => seen.add(hotel)).toList();
                     return Padding(
                       padding: const EdgeInsets.only(
                           top: 20.0, left: 20.0, right: 20.0),
@@ -137,7 +140,7 @@ Future<void> getHotelName() async {
                           iconColor: Colors.orange,
                           focusedBorder: OutlineInputBorder(
                             borderSide:
-                            const BorderSide(color: Color(0xFF176B87)),
+                                const BorderSide(color: Color(0xFF176B87)),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           border: OutlineInputBorder(
@@ -162,7 +165,9 @@ Future<void> getHotelName() async {
                     );
                   }),
               StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('reservations').snapshots(),
+                stream: FirebaseFirestore.instance
+                    .collection('reservations')
+                    .snapshots(),
                 builder: (context, snapshot) {
                   infoCard = [];
                   if (snapshot.hasData) {
@@ -172,16 +177,20 @@ Future<void> getHotelName() async {
                         final clientName = client.data()['clientName'];
                         final clientNumber = client.data()['clientNumber'];
                         final clientNationalId =
-                        client.data()['clientNationalId'];
+                            client.data()['clientNationalId'];
                         final startDate = client.data()['startDate'].toDate();
                         final roomNumber = client.data()['roomNumber'];
+                        final servicePaid = client.data()['paidBus'];
                         infoCard.add(
                           InfoCard(
                             child: BusInfoCard(
                               clientName: clientName,
                               clientNumber: clientNumber,
                               clientNationalId: clientNationalId,
-                              startDate: startDate, hotelName: hotelDropdownValue, roomNumber: roomNumber,
+                              startDate: startDate,
+                              hotelName: hotelDropdownValue,
+                              roomNumber: roomNumber,
+                              servicePaid: servicePaid,
                             ),
                           ),
                         );
@@ -189,15 +198,15 @@ Future<void> getHotelName() async {
                     }
                     return infoCard.isEmpty
                         ? Padding(
-                      padding: const EdgeInsets.only(top: 50.0),
-                      child: Center(
-                        child: Text(
-                            AppLocalizations.of(context)!.noClientsYet),
-                      ),
-                    )
+                            padding: const EdgeInsets.only(top: 50.0),
+                            child: Center(
+                              child: Text(
+                                  AppLocalizations.of(context)!.noClientsYet),
+                            ),
+                          )
                         : Column(
-                      children: infoCard,
-                    );
+                            children: infoCard,
+                          );
                   } else {
                     return const CircularProgressIndicator();
                   }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hotel_managmenet/add_data.dart';
 import 'package:hotel_managmenet/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localization.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,19 +19,18 @@ class NewEmployeePage extends StatefulWidget {
 }
 
 class _NewEmployeePageState extends State<NewEmployeePage> {
-
   String hotelDropdownValue = 'اسم الفندق';
   var hotels = [
     'اسم الفندق',
   ];
   Future<void> getHotelName() async {
     await FirebaseFirestore.instance.collection("hotels").get().then(
-          (querySnapshot) {
+      (querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
-          if(docSnapshot.data()['clientType']==widget.clientType || widget.clientType==0 ){
+          if (docSnapshot.data()['clientType'] == widget.clientType ||
+              widget.clientType == 0) {
             hotels.add(docSnapshot.data()['hotelName'].toString());
           }
-
         }
       },
     );
@@ -54,22 +53,24 @@ class _NewEmployeePageState extends State<NewEmployeePage> {
   }
 
   String resp = 'no link';
-  bool comp =false;
+  bool comp = false;
   Future<void> saveImage() async {
     if (_image == null) {
       String imageUrl = 'https://static.thenounproject.com/png/897141-200.png';
       Uint8List defaultImage =
-      (await NetworkAssetBundle(Uri.parse(imageUrl)).load(imageUrl))
-          .buffer
-          .asUint8List();
+          (await NetworkAssetBundle(Uri.parse(imageUrl)).load(imageUrl))
+              .buffer
+              .asUint8List();
       resp = await StoreData().saveDataEmployee(
-          file: defaultImage,
-          employeeName: employeeNameController.text,);
-      comp =true;
+        file: defaultImage,
+        employeeName: employeeNameController.text,
+      );
+      comp = true;
     } else {
       resp = await StoreData().saveDataEmployee(
-          file: _image!,
-          employeeName: employeeNameController.text,);
+        file: _image!,
+        employeeName: employeeNameController.text,
+      );
       comp = true;
     }
   }
@@ -85,7 +86,6 @@ class _NewEmployeePageState extends State<NewEmployeePage> {
   bool employeeTaskValidate = true;
   bool employeeTitleJobValidate = true;
   bool employeeSalaryValidate = true;
-
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +106,7 @@ class _NewEmployeePageState extends State<NewEmployeePage> {
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   var seen = <String>{};
                   List<String> uniqueList =
-                  hotels.where((hotel) => seen.add(hotel)).toList();
+                      hotels.where((hotel) => seen.add(hotel)).toList();
                   return Padding(
                     padding: const EdgeInsets.only(
                         top: 20.0, left: 20.0, right: 20.0),
@@ -119,7 +119,7 @@ class _NewEmployeePageState extends State<NewEmployeePage> {
                         iconColor: Colors.orange,
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                          const BorderSide(color: Color(0xFF176B87)),
+                              const BorderSide(color: Color(0xFF176B87)),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         border: OutlineInputBorder(
@@ -147,13 +147,13 @@ class _NewEmployeePageState extends State<NewEmployeePage> {
               labelText: AppLocalizations.of(context)!.employeeName,
               textInputType: TextInputType.text,
               controller: employeeNameController,
-              validate:employeeNameValidate,
+              validate: employeeNameValidate,
             ),
             TextFieldCustom(
               labelText: AppLocalizations.of(context)!.employeeTitleJob,
               textInputType: TextInputType.text,
               controller: employeeTitleJobController,
-              validate:employeeTitleJobValidate,
+              validate: employeeTitleJobValidate,
             ),
             TextFieldCustom(
               labelText: AppLocalizations.of(context)!.employeeNumber,
@@ -181,21 +181,30 @@ class _NewEmployeePageState extends State<NewEmployeePage> {
               text: AppLocalizations.of(context)!.addEmployee,
               pressed: () async {
                 setState(() {
-                  employeeNameController.text.isNotEmpty ?
-                  employeeNameValidate = true:   employeeNameValidate = false;
-                  employeeNumberController.text.isNotEmpty ?
-                  employeeNumberValidate = true:   employeeNumberValidate = false;
-                  employeeSalaryController.text.isNotEmpty ?
-                  employeeSalaryValidate = true:   employeeSalaryValidate = false;
-                  employeeTaskController.text.isNotEmpty ?
-                  employeeTaskValidate = true:   employeeTaskValidate = false;
-                  employeeTitleJobController.text.isNotEmpty ?
-                  employeeTitleJobValidate = true:   employeeTitleJobValidate = false;
+                  employeeNameController.text.isNotEmpty
+                      ? employeeNameValidate = true
+                      : employeeNameValidate = false;
+                  employeeNumberController.text.isNotEmpty
+                      ? employeeNumberValidate = true
+                      : employeeNumberValidate = false;
+                  employeeSalaryController.text.isNotEmpty
+                      ? employeeSalaryValidate = true
+                      : employeeSalaryValidate = false;
+                  employeeTaskController.text.isNotEmpty
+                      ? employeeTaskValidate = true
+                      : employeeTaskValidate = false;
+                  employeeTitleJobController.text.isNotEmpty
+                      ? employeeTitleJobValidate = true
+                      : employeeTitleJobValidate = false;
                 });
-                if(employeeNameValidate && employeeNumberValidate && employeeSalaryValidate && employeeTaskValidate && employeeTitleJobValidate){
+                if (employeeNameValidate &&
+                    employeeNumberValidate &&
+                    employeeSalaryValidate &&
+                    employeeTaskValidate &&
+                    employeeTitleJobValidate) {
                   await saveImage();
                   final CollectionReference postsRef =
-                  FirebaseFirestore.instance.collection('employees');
+                      FirebaseFirestore.instance.collection('employees');
                   var postID = 'employee-${employeeNameController.text}';
                   DocumentReference ref = postsRef.doc(postID);
                   ref.set({
@@ -204,12 +213,11 @@ class _NewEmployeePageState extends State<NewEmployeePage> {
                     'employeeTitleJob': employeeTitleJobController.text,
                     'employeeNumber': int.parse(employeeNumberController.text),
                     'employeeSalary': int.parse(employeeSalaryController.text),
-                    'hotelName':hotelDropdownValue,
+                    'hotelName': hotelDropdownValue,
                     'imageLink': resp,
                   });
                   Navigator.pop(context);
                 }
-
               },
             ),
             const SizedBox(

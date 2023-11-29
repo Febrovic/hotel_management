@@ -425,3 +425,92 @@ Future<Uint8List> _createHotelPdf(
   await file.writeAsBytes(await pdf.save());
   return pdf.save();
 }
+
+class ServicePdfPrev extends StatefulWidget {
+  final String totalNumber;
+  final String totalAmount;
+  final String totalRest;
+  final String serviceName;
+
+  const ServicePdfPrev({
+    super.key,
+    required this.totalNumber,
+    required this.totalAmount,
+    required this.totalRest,
+    required this.serviceName,
+  });
+
+  @override
+  State<ServicePdfPrev> createState() => _ServicePdfPrevState();
+}
+
+class _ServicePdfPrevState extends State<ServicePdfPrev> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PdfPreview(
+        build: (format) => _createServicePdf(
+          format,
+          widget.totalNumber,
+          widget.totalAmount,
+          widget.totalRest,
+          widget.serviceName,
+        ),
+      ),
+    );
+  }
+}
+
+Future<Uint8List> _createServicePdf(
+  PdfPageFormat format,
+  final String totalNumber,
+  final String totalAmount,
+  final String totalRest,
+  final String serviceName,
+) async {
+  final pdf = pdf_wid.Document(
+    version: PdfVersion.pdf_1_4,
+    compress: true,
+  );
+  var arabicFont =
+      pdf_wid.Font.ttf(await rootBundle.load("assets/fonts/Amiri-Bold.ttf"));
+  pdf.addPage(
+    pdf_wid.Page(
+      theme: pdf_wid.ThemeData.withFont(base: arabicFont),
+      pageFormat: PdfPageFormat.roll80,
+      //pageFormat: format,
+      build: (context) {
+        return pdf_wid.Row(
+            mainAxisAlignment: pdf_wid.MainAxisAlignment.end,
+            children: [
+              pdf_wid.Column(
+                  crossAxisAlignment: pdf_wid.CrossAxisAlignment.end,
+                  children: [
+                    pdf_wid.Text(
+                      'اسم الخدمة : $serviceName',
+                      textDirection: pdf_wid.TextDirection.rtl,
+                    ),
+                    pdf_wid.Text(
+                      'عدد الاشخاص المشتركين : $totalNumber',
+                      textDirection: pdf_wid.TextDirection.rtl,
+                    ),
+                    pdf_wid.Text(
+                      'اجمالي الايرادات : $totalAmount',
+                      textDirection: pdf_wid.TextDirection.rtl,
+                    ),
+                    pdf_wid.Text(
+                      'اجمالي المستحقات المتبقية : $totalRest',
+                      textDirection: pdf_wid.TextDirection.rtl,
+                    ),
+                  ]),
+            ]);
+      },
+    ),
+  );
+
+  final time = DateTime.now();
+  final file =
+      File("/storage/emulated/0/Download/hotel_report_${serviceName}.pdf");
+  await file.writeAsBytes(await pdf.save());
+  return pdf.save();
+}

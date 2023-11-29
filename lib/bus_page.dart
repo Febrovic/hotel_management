@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_managmenet/card_widget.dart';
 import 'package:hotel_managmenet/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hotel_managmenet/pdf_perview.dart';
 import 'package:hotel_managmenet/reusable_component.dart';
 
 class BusScreen extends StatefulWidget {
@@ -55,7 +56,6 @@ class _BusScreenState extends State<BusScreen> {
                   : (value.data()?[
                       'hudaPrice']); // Access your after your get the data
     });
-    print("price:$cost");
   }
 
   String hotelDropdownValue = 'اسم الفندق';
@@ -77,13 +77,10 @@ class _BusScreenState extends State<BusScreen> {
   }
 
   @override
-  void initState() {
-    getServicePrice();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    int totalAmount = 0;
+    int totalRest = 0;
+    int totalNumber = 0;
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
       appBar: AppBar(
@@ -220,11 +217,34 @@ class _BusScreenState extends State<BusScreen> {
                       });
                 },
               ),
+              ButtonWithoutImage(
+                text: AppLocalizations.of(context)!.print,
+                pressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ServicePdfPrev(
+                                totalNumber: (totalNumber ~/ 2).toString(),
+                                totalAmount: totalAmount.toString(),
+                                totalRest: totalRest.toString(),
+                                serviceName: widget.serviceType == 0
+                                    ? AppLocalizations.of(context)!.bus
+                                    : widget.serviceType == 1
+                                        ? AppLocalizations.of(context)!.flight
+                                        : widget.serviceType == 2
+                                            ? AppLocalizations.of(context)!
+                                                .idBracelet
+                                            : AppLocalizations.of(context)!
+                                                .huda,
+                              )));
+                },
+              ),
               FutureBuilder(
                   future: getHotelName(),
                   builder:
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     var seen = <String>{};
+
                     List<String> uniqueList =
                         hotels.where((hotel) => seen.add(hotel)).toList();
                     return Padding(
@@ -252,13 +272,15 @@ class _BusScreenState extends State<BusScreen> {
                             child: Text(hotels),
                           );
                         }).toList(),
-                        onChanged: (String? newValue) {
+                        onChanged: (String? newValue) async {
                           setState(() {
                             hotelDropdownValue = newValue!;
                             hotels = [
                               newValue,
                             ];
                           });
+                          await getServicePrice();
+                          setState(() {});
                         },
                       ),
                     );
@@ -286,7 +308,14 @@ class _BusScreenState extends State<BusScreen> {
                                 : widget.serviceType == 2
                                     ? client.data()['paidIdBracelet']
                                     : client.data()['paidHuda'];
-                        final amountRest = (cost - servicePaid);
+                        int amountRest =
+                            servicePaid == 0 ? 0 : (cost - servicePaid);
+
+                        totalAmount = totalAmount + servicePaid;
+                        totalNumber =
+                            servicePaid == 0 ? totalNumber : totalNumber + 1;
+                        totalRest = totalRest + amountRest;
+                        print("dalkfmkdsa $totalNumber");
                         infoCard.add(
                           InfoCard(
                             child: BusInfoCard(
